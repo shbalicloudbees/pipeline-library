@@ -2,7 +2,7 @@
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
   def dockerReg = "946759952272.dkr.ecr.us-east-1.amazonaws.com"
   imageName = "helloworld-nodejs"
-  def repoName = env.repoOwner + "/" + imageName
+  def repoName = ${repoOwner} + "/" + imageName
   repoName = repoName.toLowerCase()
   setECRLifecyclePolicy(repoName)
   def label = "kaniko"
