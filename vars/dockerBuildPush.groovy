@@ -1,8 +1,5 @@
 // vars/dockerBuildPush.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
-  imageNameTag()
-  gitShortCommit()
-  imageName = env.IMAGE_NAME
   def dockerReg = "946759952272.dkr.ecr.us-east-1.amazonaws.com"
   def repoName = env.IMAGE_REPO + "/" + imageName
   repoName = repoName.toLowerCase()
@@ -11,6 +8,9 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = "
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
   podTemplate(name: 'kaniko', label: label, yaml: podYaml) {
     node(label) {
+      imageNameTag()
+      gitShortCommit()
+      imageName = env.IMAGE_NAME
       container(name: 'kaniko', shell: '/busybox/sh') {
         body()
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
