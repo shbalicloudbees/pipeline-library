@@ -1,5 +1,8 @@
 // vars/dockerBuildPush.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
+  imageNameTag()
+  gitShortCommit()
+  imageName = env.IMAGE_NAME
   def dockerReg = "946759952272.dkr.ecr.us-east-1.amazonaws.com"
   def repoName = env.IMAGE_REPO + "/" + imageName
   repoName = repoName.toLowerCase()
