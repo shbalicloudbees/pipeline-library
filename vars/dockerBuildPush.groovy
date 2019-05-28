@@ -1,10 +1,9 @@
 // vars/dockerBuildPush.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
-  def dockerReg = "946759952272.dkr.ecr.us-east-1.amazonaws.com"
+  def dockerReg = "gcr.io/core-workshop"
   imageName = "helloworld-nodejs"
-  def repoName = env.repoOwner + "/" + imageName
+  def repoName = env.repoOwner + "-" + imageName
   repoName = repoName.toLowerCase()
-  setECRLifecyclePolicy(repoName)
   def label = "kaniko"
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
   podTemplate(name: 'kaniko', label: label, yaml: podYaml) {
