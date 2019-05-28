@@ -9,7 +9,7 @@ spec:
     - cat
     tty: true
   - name: apache-benchmark
-    image: 946759952272.dkr.ecr.us-east-1.amazonaws.com/kypseli/apache-benchmark:alpine3.8-2.4
+    image: gcr.io/technologists/apache-benchmark:0.0.1
     command:
     - cat
     tty: true
