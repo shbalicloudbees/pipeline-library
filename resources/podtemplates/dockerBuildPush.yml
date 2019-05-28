@@ -4,7 +4,7 @@
      spec:
        containers:
        - name: kaniko
-         image: 946759952272.dkr.ecr.us-east-1.amazonaws.com/kypseli/kaniko:pre-0.4
+         image: gcr.io/kaniko-project/executor:debug-1723613e8f4806446b8c4f1669741e7846fce256
          resources:
            requests:
              memory: "1Gi"
