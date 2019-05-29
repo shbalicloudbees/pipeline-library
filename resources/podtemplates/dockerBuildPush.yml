@@ -4,12 +4,12 @@
      spec:
        containers:
        - name: kaniko
-         image: gcr.io/kaniko-project/executor:debug-1723613e8f4806446b8c4f1669741e7846fce256
+         image: gcr.io/kaniko-project/executor:debug
          resources:
            requests:
              memory: "1Gi"
          command:
-         - /busybox/cat
+         - /busybox/sh
          tty: true
          volumeMounts:
            - name: kaniko-secret
