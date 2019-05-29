@@ -19,3 +19,5 @@ spec:
     - name: kaniko-secret
       secret:
         secretName: kaniko-secret
+  nodeSelector:
+    type: agent
