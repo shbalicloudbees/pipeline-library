@@ -2,8 +2,7 @@
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
   def dockerReg = "gcr.io/core-workshop"
   imageName = "helloworld-nodejs"
-  def repoName = env.repoOwner + "-" + imageName
-  repoName = repoName.toLowerCase()
+  def repoName = env.IMAGE_REPO.toLowerCase()
   def label = "kaniko"
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
   podTemplate(name: 'kaniko', label: label, yaml: podYaml) {
@@ -14,7 +13,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = "
         body()
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
-            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg context=${env.IMAGE_REPO}-${imageName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${SHORT_COMMIT} --build-arg commitAuthor=${COMMIT_AUTHOR} -d ${dockerReg}/${repoName}:${BUILD_NUMBER}
+            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${SHORT_COMMIT} --build-arg commitAuthor=${COMMIT_AUTHOR} -d ${dockerReg}/${repoName}:${BUILD_NUMBER}
           """
         }
         }
