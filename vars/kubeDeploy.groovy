@@ -8,7 +8,7 @@ def call(imageName, imageTag) {
       node(label) {
         writeFile file: "deploy.yml", text: deployYaml
         container("kubectl") {
-          sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/${repoName}-${imageName}:${BUILD_NUMBER}#' deploy.yml")
+          sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/${repoName}:${BUILD_NUMBER}#' deploy.yml")
           sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
           sh "kubectl apply -f deploy.yml"
           sh "echo 'deployed to http://prod.cb-sa.io/${repoName}/'"
