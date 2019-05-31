@@ -1,6 +1,6 @@
 // vars/dockerBuildPush.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
-  def dockerReg = "gcr.io/core-workshop"
+  def dockerReg = "gcr.io/${gcpProject}"
   imageName = "helloworld-nodejs"
   def label = "kaniko"
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
