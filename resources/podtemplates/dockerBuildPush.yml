@@ -20,4 +20,4 @@ spec:
       secret:
         secretName: kaniko-secret
   nodeSelector:
-    type = agent
+    type: agent
