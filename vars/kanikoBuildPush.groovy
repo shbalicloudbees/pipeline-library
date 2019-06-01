@@ -4,7 +4,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   imageName = "helloworld-nodejs"
   def label = "kaniko"
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
-  podTemplate(name: 'kaniko', label: label, yaml: podYaml) {
+  podTemplate(name: 'kaniko', label: label, yaml: podYaml, inheritFrom: 'default-jnlp') {
     node(label) {
       imageNameTag()
       gitShortCommit()
