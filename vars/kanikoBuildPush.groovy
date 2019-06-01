@@ -2,7 +2,7 @@
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", String target = ".", String dockerFile="Dockerfile", Closure body) {
   def dockerReg = "gcr.io/${gcpProject}"
   imageName = "helloworld-nodejs"
-  def label = "kaniko-${SHORT_COMMIT}"
+  def label = "kaniko-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
   podTemplate(name: 'kaniko', label: label, yaml: podYaml, inheritFrom: 'default-jnlp') {
     node(label) {
