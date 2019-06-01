@@ -1,5 +1,5 @@
 // vars/kubeDeploy.groovy
-def call(imageName, imageTag, repoOwner) {
+def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def label = "kubectl"
     def podYaml = libraryResource 'podtemplates/kubeDeploy.yml'
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
@@ -9,7 +9,7 @@ def call(imageName, imageTag, repoOwner) {
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
           //create environment repo for prod if it doesn't already exist
-          withCredentials([string(credentialsId: "${env.credId}", passwordVariable: 'ACCESS_TOKEN')]) {
+          withCredentials([string(credentialsId: "${githubCredentialId}", passwordVariable: 'ACCESS_TOKEN')]) {
             def getRepoJson = sh("""curl -H "Authorization: token ${ACCESS_TOKEN}" https://api.github.com/repos/${repoOwner}/${envProdRepo}""", returnStdout: true)
             echo getRepoJson
             def repoNotExists = sh("cat 'Not Found' ${getRepoJson}", returnStdout: true)
