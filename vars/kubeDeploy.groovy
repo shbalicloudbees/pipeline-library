@@ -28,9 +28,9 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/${repoName}:${BUILD_NUMBER}#' deploy.yml")
         sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
         sh '''
+          git init
           git config user.email "deployBot@cb-sa.io"
           git config user.name "Deploy Bot"
-          git init
           git add deploy.yml
           git commit -a -m "updating $envProdRepo deployment for $repoName"
           git remote add origin https://github.com/bee-cd/$envProdRepo.git
