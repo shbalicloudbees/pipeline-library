@@ -18,7 +18,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             ''', returnStdout: true)
           echo getRepoJson
           def repoNotExists = sh(script: '''
-              cat "Not Found" $getRepoJson
+              $getRepoJson = *"Not Found"*
             ''', returnStdout: true)
           echo repoNotExists
           //curl -H "Authorization: token ACCESS_TOKEN" --data '{"name":""}' https://api.github.com/orgs/ORGANISATION_NAME/repos
