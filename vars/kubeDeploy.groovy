@@ -9,7 +9,8 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
         //create environment repo for prod if it doesn't already exist
-        withCredentials([usernamePassword(credentialsId: githubCredentialId, passwordVariable: 'ACCESS_TOKEN')]) {
+        echo githubCredentialId
+        withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
           echo repoOwner
           echo envProdRepo
           def getRepoJson = sh(script: '''
