@@ -27,15 +27,17 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         writeFile file: "deploy.yml", text: deployYaml
         sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/${repoName}:${BUILD_NUMBER}#' deploy.yml")
         sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
-        sh """
-          git init
-          git config user.email "deployBot@cb-sa.io"
-          git config user.name "Deploy Bot"
-          git add deploy.yml
-          git commit -a -m 'updating ${envProdRepo} deployment for ${repoName}'
-          git remote add origin https://github.com/bee-cd/${envProdRepo}.git
-          git push -u origin master
-        """
+        withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
+          sh """
+            git init
+            git config user.email "deployBot@cb-sa.io"
+            git config user.name "${USERNAME}"
+            git add deploy.yml
+            git commit -a -m 'updating ${envProdRepo} deployment for ${repoName}'
+            git remote add origin https://${USERNAME}:${ACCESS_TOKEN}@github.com/bee-cd/${envProdRepo}.git
+            git push -u origin master
+          """
+        }
         container("kubectl") {
           sh "kubectl apply -f deploy.yml"
           sh "echo 'deployed to http://prod.cb-sa.io/${repoName}/'"
