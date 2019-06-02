@@ -28,7 +28,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/${repoName}:${BUILD_NUMBER}#' deploy.yml")
         sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
         sh '''
-          mkdir $envProdRepo
+          mkdir -p $envProdRepo
           cd $envProdRepo
           git init
           cp ../deploy.yml .
