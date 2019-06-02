@@ -16,7 +16,8 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
             /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${repoName}:${BUILD_NUMBER}
           """
         }
-        }
       }
+      publishEvent event:jsonEvent('{"eventType":"containerImagePush", "image":"${dockerReg}/${repoName}:${BUILD_NUMBER}"}'), verbose: true
     }
+  }
 }
