@@ -25,19 +25,19 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           //curl -H "Authorization: token ACCESS_TOKEN" --data '{"name":""}' https://api.github.com/orgs/ORGANISATION_NAME/repos
         }
         writeFile file: "deploy.yml", text: deployYaml
+        sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/${repoName}:${BUILD_NUMBER}#' deploy.yml")
+        sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
+        sh '''
+          mkdir $envProdRepo
+          cd $envProdRepo
+          git init
+          cp ../deploy.yml .
+          git add deploy.yml
+          git commit -a -m "updating $envProdRepo deployment for $repoName"
+          git remote add origin https://github.com/bee-cd/$envProdRepo.git
+          git push -u origin master
+        '''
         container("kubectl") {
-          sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/${repoName}:${BUILD_NUMBER}#' deploy.yml")
-          sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
-          sh '''
-            mkdir $envProdRepo
-            cd $envProdRepo
-            git init
-            cp ../deploy.yml .
-            git add deploy.yml
-            git commit -a -m "updating $envProdRepo deployment for $repoName"
-            git remote add origin https://github.com/bee-cd/$envProdRepo.git
-            git push -u origin master
-          '''
           sh "kubectl apply -f deploy.yml"
           sh "echo 'deployed to http://prod.cb-sa.io/${repoName}/'"
         }
