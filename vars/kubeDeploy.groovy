@@ -32,8 +32,8 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           git config user.email "deployBot@cb-sa.io"
           git config user.name "Deploy Bot"
           git add deploy.yml
-          git commit -a -m "updating $envProdRepo deployment for $repoName"
-          git remote add origin https://github.com/bee-cd/$envProdRepo.git
+          git commit -a -m 'updating ${envProdRepo} deployment for ${repoName}'
+          git remote add origin https://github.com/bee-cd/${envProdRepo}.git
           git push -u origin master
         '''
         container("kubectl") {
