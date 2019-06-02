@@ -13,10 +13,12 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo repoOwner
           echo envProdRepo
           def getRepoJson = sh(script: '''
-            curl -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/$repoOwner/$envProdRepo
-          ''', returnStdout: true)
+              curl -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/$repoOwner/$envProdRepo
+            ''', returnStdout: true)
           echo getRepoJson
-          def repoNotExists = sh("cat 'Not Found' ${getRepoJson}", returnStdout: true)
+          def repoNotExists = sh(script: '''
+              cat "Not Found" $getRepoJson
+            ''', returnStdout: true)
           echo repoNotExists
           //curl -H "Authorization: token ACCESS_TOKEN" --data '{"name":""}' https://api.github.com/orgs/ORGANISATION_NAME/repos
         }
