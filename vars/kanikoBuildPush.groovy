@@ -17,7 +17,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
           """
         }
       }
-      publishEvent event:jsonEvent('{"eventType":"containerImagePush", "image":"$dockerReg/$repoName:$BUILD_NUMBER"}'), verbose: true
+      publishEvent event:jsonEvent("{'eventType':'containerImagePush', 'image':'${dockerReg}/${repoName}:${BUILD_NUMBER}'}"), verbose: true
     }
   }
 }
