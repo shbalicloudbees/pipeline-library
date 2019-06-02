@@ -10,8 +10,10 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
       node(label) {
         //create environment repo for prod if it doesn't already exist
         withCredentials([usernamePassword(credentialsId: githubCredentialId, passwordVariable: 'ACCESS_TOKEN')]) {
+          echo repoOwner
+          echo envProdRepo
           def getRepoJson = sh(script: '''
-            curl -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/${repoOwner}/${envProdRepo}
+            curl -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/$repoOwner/$envProdRepo
           ''', returnStdout: true)
           echo getRepoJson
           def repoNotExists = sh("cat 'Not Found' ${getRepoJson}", returnStdout: true)
