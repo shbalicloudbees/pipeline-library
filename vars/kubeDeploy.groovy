@@ -17,11 +17,11 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
               curl -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/$repoOwner/$envProdRepo | jq 'contains({message: "Not Found"})'
             ''', returnStdout: true)
           echo repoNotExists
-          sh(script: '''#!/bin/bash
-              if [ '''+repoNotExists+''' = true ]; then
-                curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"$envProdRepo"}' https://api.github.com/orgs/$repoOwner/repos
-              fi
+          if(repoNotExists) {
+          sh(script: '''
+              curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"$envProdRepo"}' https://api.github.com/orgs/$repoOwner/repos
             ''')
+          }
           //curl -H "Authorization: token ACCESS_TOKEN" --data '{"name":""}' https://api.github.com/orgs/ORGANISATION_NAME/repos
         }
         writeFile file: "deploy.yml", text: deployYaml
