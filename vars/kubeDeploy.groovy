@@ -18,7 +18,8 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             ''', returnStdout: true)
           echo repoNotExists
           sh(script: '''
-              if [ "$repoNotExists" = true ]; then
+              bool = $repoNotExists
+              if [ "$bool" = true ]; then
                 curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"$envProdRepo"}' https://api.github.com/orgs/$repoOwner/repos
               fi
             ''')
