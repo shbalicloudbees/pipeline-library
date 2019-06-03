@@ -13,11 +13,11 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
-            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${repoName}:${BUILD_NUMBER}
+            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/helloworld-nodejs:${repoName}-${BUILD_NUMBER}
           """
         }
       }
-      publishEvent event:jsonEvent("{'eventType':'containerImagePush', 'image':'${dockerReg}/${repoName}:${BUILD_NUMBER}'}"), verbose: true
+      publishEvent event:jsonEvent("{'eventType':'containerImagePush', 'image':'${dockerReg}/helloworld-nodejs:${repoName}-${BUILD_NUMBER}'}"), verbose: true
     }
   }
 }
