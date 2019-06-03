@@ -16,7 +16,7 @@ spec:
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: REPLACE_SERVICE_NAME-production
+  name: REPLACE_SERVICE_NAME-staging
   labels:
     net.beedemo.deploy.type: workshop
 spec:
@@ -27,7 +27,7 @@ spec:
       labels:
         net.beedemo.deploy.type: workshop
         app: REPLACE_SERVICE_NAME
-        env: production
+        env: staging
     spec:
       containers:
       - name: REPLACE_SERVICE_NAME
@@ -58,4 +58,4 @@ spec:
         backend:
           serviceName: REPLACE_SERVICE_NAME
           servicePort: 80
-    host: prod.cb-sa.io
+    host: staging.cb-sa.io
