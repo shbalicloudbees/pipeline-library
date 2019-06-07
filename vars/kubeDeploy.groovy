@@ -43,7 +43,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           }
           sh """
             git commit -a -m 'updating ${envStagingRepo} deployment for ${repoName}'
-            git push -u origin master'
+            git push -u origin master
           """
         }
         container("kubectl") {
