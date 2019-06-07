@@ -22,7 +22,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             sh(script: """
                 curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
               """)
-             pullMaster = true 
+             pullMaster = false 
           }
           //curl -H "Authorization: token ACCESS_TOKEN" --data '{"name":""}' https://api.github.com/orgs/ORGANISATION_NAME/repos
         }
