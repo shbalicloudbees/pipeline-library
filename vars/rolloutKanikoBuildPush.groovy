@@ -17,14 +17,13 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       rolloutImageNameTag()
       gitShortCommit()
       def repoName = env.IMAGE_REPO.toLowerCase()
-      echo "${repoName}"
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           echo """#!/busybox/sh
-            /kaniko/executor -f ${pwd()}/${folderName}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${repoName}-${BUILD_NUMBER}
+            /kaniko/executor -f ${pwd()}/${folderName}/${dockerFile} -c ${pwd()}/${folderName} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${repoName}-${BUILD_NUMBER}
           """
           sh """#!/busybox/sh
-            /kaniko/executor -f ${pwd()}/${folderName}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${repoName}-${BUILD_NUMBER}
+            /kaniko/executor -f ${pwd()}/${folderName}/${dockerFile} -c ${pwd()}/${folderName} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${repoName}-${BUILD_NUMBER}
           """
         }
       }
