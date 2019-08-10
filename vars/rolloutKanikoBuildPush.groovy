@@ -7,7 +7,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   podTemplate(name: 'kaniko', label: label, yaml: podYaml, inheritFrom: 'default-jnlp', nodeSelector: 'type=agent') {
     node(label) {
       body()
-      rollout-imageNameTag()
+      rolloutImageNameTag()
       gitShortCommit()
       def repoName = env.IMAGE_REPO.toLowerCase()
       container(name: 'kaniko', shell: '/busybox/sh') {
