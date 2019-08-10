@@ -22,7 +22,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
           echo "${ls()}"
           echo "Dockerfile path: ${pwd()}/${folderName}/${dockerFile}"
           sh """#!/busybox/sh
-            /kaniko/executor -f ${pwd()}/${folderName}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${repoName}-${BUILD_NUMBER}
+            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${repoName}-${BUILD_NUMBER}
           """
         }
       }
