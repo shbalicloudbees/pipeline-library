@@ -47,6 +47,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           """
         }
         container("kubectl") {
+          sh "cat deploy.yml"
           sh "kubectl apply -f deploy.yml"
           sh "echo 'deployed to http://staging.cb-sa.io/${repoName}/'"
         }
