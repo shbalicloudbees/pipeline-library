@@ -57,5 +57,5 @@ spec:
       - path: /REPLACE_SERVICE_NAME/?(.*)
         backend:
           serviceName: REPLACE_SERVICE_NAME
-          servicePort: 80
+          servicePort: 3000
     host: staging.cb-sa.io
