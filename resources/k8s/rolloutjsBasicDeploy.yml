@@ -6,8 +6,8 @@ metadata:
     net.beedemo.deploy.type: workshop
 spec:
   ports:
-  - port: 80
-    targetPort: 8080
+  - port: 3000
+    targetPort: 3000
     protocol: TCP
     name: http
   selector:
@@ -39,7 +39,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - name: public
-          containerPort: 8080
+          containerPort: 3000
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -57,5 +57,5 @@ spec:
       - path: /REPLACE_SERVICE_NAME/?(.*)
         backend:
           serviceName: REPLACE_SERVICE_NAME
-          servicePort: 80
+          servicePort: 3000
     host: staging.cb-sa.io
