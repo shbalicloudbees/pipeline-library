@@ -7,10 +7,10 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   def folderName = ""
   podTemplate(name: 'kaniko', label: label, yaml: podYaml, inheritFrom: 'default-jnlp', nodeSelector: 'type=agent') {
     node(label) {
-      if(imageName=="rolloutjs"){
+      if(imageName=="rollout-js"){
         folderName = "frontend-spring-boot-react-crud-full-stack-with-maven"
       }
-      else if(imageName=="rolloutjava"){
+      else if(imageName=="rollout-java"){
         folderName = "backend-spring-boot-react-crud-full-stack-with-maven"
       }
       body()
