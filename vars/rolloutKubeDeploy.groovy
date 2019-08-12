@@ -3,7 +3,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def label = "kubectl"
     def podYaml = libraryResource 'podtemplates/kubeDeploy.yml'
     def deployYaml = libraryResource "k8s/${imageName}BasicDeploy.yml"
-    //def repoName = env.IMAGE_REPO.toLowerCase()
+    def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
     def pullMaster = true
     
