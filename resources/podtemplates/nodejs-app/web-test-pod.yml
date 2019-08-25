@@ -11,8 +11,21 @@ spec:
     securityContext:
       runAsUser: 1000
       runAsGroup: 1000
+  - name: jnlp
+    image: gcr.io/technologists/k8s-jnlp-agent:0.0.5
+    command:
+    - /bin/sh
+    args:
+    - /var/jenkins_config/jenkins-agent
+    tty: true
+    securityContext:
+      fsGroup: 10000
   - name: testcafe
     image: gcr.io/technologists/testcafe:0.0.2
     command:
     - cat
     tty: true
+  volumes:
+  - configMapVolume:
+      configMapName: "jenkins-agent"
+      mountPath: "/var/jenkins_config"
