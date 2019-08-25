@@ -18,6 +18,9 @@ spec:
     args:
     - /var/jenkins_config/jenkins-agent
     tty: true
+    volumeMounts:
+      - name: jenkins-agent
+        mountPath: /var/jenkins_config
     securityContext:
       fsGroup: 10000
   - name: testcafe
@@ -26,6 +29,6 @@ spec:
     - cat
     tty: true
   volumes:
-  - configMapVolume:
-      configMapName: "jenkins-agent"
-      mountPath: "/var/jenkins_config"
+    - name: jenkins-agent
+      configMap:
+        name: jenkins-agent
