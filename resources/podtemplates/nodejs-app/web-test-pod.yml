@@ -8,9 +8,6 @@ spec:
     command:
     - cat
     tty: true
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
   - name: jnlp
     image: gcr.io/technologists/k8s-jnlp-agent:0.0.5
     command:
@@ -21,13 +18,14 @@ spec:
     volumeMounts:
       - name: jenkins-agent
         mountPath: /var/jenkins_config
-    securityContext:
-      runAsUser: 1000
   - name: testcafe
     image: gcr.io/technologists/testcafe:0.0.2
     command:
     - cat
     tty: true
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
   volumes:
     - name: jenkins-agent
       configMap:
