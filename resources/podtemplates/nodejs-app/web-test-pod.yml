@@ -8,6 +8,9 @@ spec:
     command:
     - cat
     tty: true
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
   - name: testcafe
     image: gcr.io/technologists/testcafe:0.0.2
     command:
