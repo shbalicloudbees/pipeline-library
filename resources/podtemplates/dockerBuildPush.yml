@@ -21,4 +21,4 @@ spec:
       secret:
         secretName: kaniko-secret
   securityContext:
-    runAsUser: 1000
+    runAsUser: 0
