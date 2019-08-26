@@ -20,3 +20,5 @@ spec:
     - name: kaniko-secret
       secret:
         secretName: kaniko-secret
+  securityContext:
+    fsGroup: 10000
