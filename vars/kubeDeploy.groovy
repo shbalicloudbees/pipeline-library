@@ -7,7 +7,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def envStagingRepo = "environment_staging"
     def pullMaster = true
     
-    podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
+    podTemplate(name: 'kubectl', label: label, inheritFrom: 'default-jnlp', yaml: podYaml) {
       node(label) {
         //create environment repo for prod if it doesn't already exist
         echo githubCredentialId
