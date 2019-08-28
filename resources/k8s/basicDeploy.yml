@@ -29,6 +29,7 @@ spec:
         app: REPLACE_SERVICE_NAME
         env: staging
     spec:
+      serviceAccountName: cje
       containers:
       - name: REPLACE_SERVICE_NAME
         image: REPLACE_IMAGE_TAG
