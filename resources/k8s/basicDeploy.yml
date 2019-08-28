@@ -40,6 +40,8 @@ spec:
         ports:
         - name: public
           containerPort: 8080
+      securityContext:
+        runAsUser: 1000
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
