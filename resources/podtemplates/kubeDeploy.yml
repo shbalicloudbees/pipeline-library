@@ -4,7 +4,7 @@ metadata:
 spec:
   containers:
   - name: kubectl
-    image: lachlanevenson/k8s-kubectl:v1.11.2-bash
+    image: gcr.io/cloud-builders/kubectl
     resources:
       requests:
         memory: "500Mi"
