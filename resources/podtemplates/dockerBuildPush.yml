@@ -2,7 +2,6 @@ kind: Pod
 metadata:
   name: kaniko
 spec:
-  serviceAccountName: kaniko
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug-v0.10.0
