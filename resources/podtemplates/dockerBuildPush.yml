@@ -2,24 +2,7 @@ kind: Pod
 metadata:
   name: kaniko
 spec:
-  serviceAccountName: kaniko
   containers:
-  - name: jnlp
-    image: gcr.io/technologists/k8s-jnlp-agent:0.0.5
-    imagePullPolicy: Always
-    command:
-    - /bin/sh
-    args:
-    - /var/jenkins_config/jenkins-agent
-    tty: true
-    volumeMounts:
-    - mountPath: "/var/jenkins_config"
-      name: "volume-0"
-      readOnly: false
-    - mountPath: "/home/jenkins/agent"
-      name: "workspace-volume"
-      readOnly: false
-    workingDir: "/home/jenkins/agent"
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug-v0.10.0
     imagePullPolicy: Always
