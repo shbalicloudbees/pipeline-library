@@ -6,6 +6,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
     def pullMaster = true
+    def repoNotExists = true
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
@@ -14,10 +15,10 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
           echo repoOwner
           echo envStagingRepo
-          def repoNotExists = sh(script: '''
+          repoNotExists = sh(script: '''
               curl -s -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/${repoOwner}/${envStagingRepo} | jq 'contains({message: "Not Found"})'
             ''', returnStdout: true)
-          echo repoNotExists
+          echo "repoNotExists: ${repoNotExists}"
           if(repoNotExists) {
             sh(script: """
                 curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
@@ -33,7 +34,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             git config user.name "${USERNAME}"
             git remote add origin https://${USERNAME}:${ACCESS_TOKEN}@github.com/${repoOwner}/${envStagingRepo}.git
           """
-          echo pullMaster
+          echo "pullMaster: ${pullMaster}"
           if(pullMaster) {
             sh 'git pull origin master'
           } else {
