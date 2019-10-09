@@ -10,6 +10,8 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       gitShortCommit()
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+          sh 'pwd'
+          sh 'ls'
           sh """#!/busybox/sh
             /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${imageTag}
           """
