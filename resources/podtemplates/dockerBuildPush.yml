@@ -2,7 +2,6 @@ kind: Pod
 metadata:
   name: kaniko
 spec:
-  serviceAccount: kaniko
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug-v0.10.0
@@ -22,5 +21,3 @@ spec:
         secretName: kaniko-secret
   securityContext:
     runAsUser: 0
-  nodeSelector:
-    type: "agent"
