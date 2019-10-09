@@ -14,5 +14,7 @@ spec:
   volumes:
   - name: gcp-logs
     emptyDir: {}
+  serviceAccount:
+  - cloud-run-sa
   securityContext:
     runAsUser: 1000
