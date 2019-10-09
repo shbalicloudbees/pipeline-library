@@ -15,9 +15,10 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
           echo repoOwner
           echo envStagingRepo
-          repoNotExists = sh(script: '''
+          sh "curl -s -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/${repoOwner}/${envStagingRepo}"
+          repoNotExists = sh(script: """
               curl -s -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/${repoOwner}/${envStagingRepo} | jq 'contains({message: "Not Found"})'
-            ''', returnStdout: true)
+            """, returnStdout: true)
           echo "repoNotExists: ${repoNotExists}"
           if(repoNotExists=='true') {
             sh(script: """
