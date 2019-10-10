@@ -6,6 +6,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
     def pullMaster = true
+    def status = 200
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
@@ -15,7 +16,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo repoOwner
           echo envStagingRepo
 
-        def status = sh(script: """
+        status = sh(script: """
             STATUSCODE=\$(curl --silent --output /dev/stderr --write-out "%{http_code}" -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos)
             echo \$STATUSCODE
           """, returnStdout: true)
