@@ -16,7 +16,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo envStagingRepo
 
         def status = sh(script: """
-            STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos)
+            STATUSCODE=\$(curl --silent --output /dev/stderr --write-out "%{http_code}" -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos)
             echo $STATUSCODE
           """, returnStdout: true)
         }
