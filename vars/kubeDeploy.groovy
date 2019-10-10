@@ -15,7 +15,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo envStagingRepo
 
         sh(script: """
-            curl --silent -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos)
+            curl --silent -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
           """)
         }
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
