@@ -6,7 +6,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
     def pullMaster = false
-    int status
+    def status
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
@@ -22,7 +22,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           """, returnStdout: true)
         }
         echo "repo create returned status: ${status}"
-        if(status!=201){
+        if(status!='201'){
           echo "setting pullMaster to true"
           pullMaster=true
         }
