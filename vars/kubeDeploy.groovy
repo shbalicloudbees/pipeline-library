@@ -6,7 +6,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
     def pullMaster = false
-    int status = 200
+    int status
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
