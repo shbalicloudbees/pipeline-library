@@ -15,16 +15,12 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
           echo repoOwner
           echo envStagingRepo
-          repoNotExists = sh(script: """
-              curl -s -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/${repoOwner}/${envStagingRepo} | jq 'contains({message: "Not Found"})'
-            """, returnStdout: true)
-          echo "repoNotExists: ${repoNotExists}"
-          if(repoNotExists || !repoNotExists=='false') {
-            sh(script: """
-                curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
-              """)
-             pullMaster = false 
-          }
+
+        sh(script: """
+            curl -H "Authorization: token $ACCESS_TOKEN" -x DELETE https://api.github.com/orgs/${repoOwner}/repos/${envStagingRepo}
+            curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
+          """)
+
           //curl -H "Authorization: token ACCESS_TOKEN" --data '{"name":""}' https://api.github.com/orgs/ORGANISATION_NAME/repos
         }
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
@@ -34,13 +30,10 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             git config user.name "${USERNAME}"
             git remote add origin https://${USERNAME}:${ACCESS_TOKEN}@github.com/${repoOwner}/${envStagingRepo}.git
           """
-          echo "pullMaster: ${pullMaster}"
-          if(pullMaster) {
-            sh 'git pull origin master'
-          } else {
-            writeFile file: "deploy.yml", text: deployYaml
-            sh 'git add deploy.yml'
-          }
+
+          writeFile file: "deploy.yml", text: deployYaml
+          sh 'git add deploy.yml'
+
           sh("sed -i 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
           sh("sed -i 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
           sh """
