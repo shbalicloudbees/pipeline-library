@@ -22,7 +22,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           """, returnStdout: true)
         }
         echo "repo create returned status: ${status}"
-        if(status!='201'){
+        if(!status.equalsIgnoreCase("201")){
           echo "setting pullMaster to true"
           pullMaster=true
         }
