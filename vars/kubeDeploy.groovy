@@ -22,7 +22,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           """, returnStdout: true)
         }
         echo "repo create returned status: ${status}"
-        if(status!=200){
+        if(status!=201){
           pullMaster=true
         }
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
