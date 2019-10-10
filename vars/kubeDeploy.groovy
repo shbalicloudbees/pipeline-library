@@ -36,10 +36,8 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo "pullMaster: ${pullMaster}"
           if(pullMaster) {
             sh 'git pull origin master'
-          } else {
-            writeFile file: "deploy.yml", text: deployYaml
-            sh 'git add deploy.yml'
           }
+          writeFile file: "deploy.yml", text: deployYaml
 
           sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
           sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
