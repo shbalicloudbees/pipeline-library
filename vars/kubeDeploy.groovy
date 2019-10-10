@@ -41,11 +41,11 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             sh 'git add deploy.yml'
           }
 
-          sh("sed -i 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
-          sh("sed -i 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
+          sh("sed -i.bak's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
+          sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
           sh """
             git add *
-            git commit -a -m 'updating ${envStagingRepo} deployment for ${repoName}'
+            git commit -a -m 'updating ${envStagingRepo} deployment with version ${repoName}-${BUILD_NUMBER}'
             git push -u origin master
           """
         }
