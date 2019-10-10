@@ -17,7 +17,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo envStagingRepo
 
         sh(script: """
-            curl -H "Authorization: token $ACCESS_TOKEN" -x DELETE https://api.github.com/orgs/${repoOwner}/repos/${envStagingRepo}
+            curl -x DELETE -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/orgs/${repoOwner}/repos/${envStagingRepo}
             curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
           """)
 
