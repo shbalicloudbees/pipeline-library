@@ -5,8 +5,6 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
     def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
-    def pullMaster = false
-    def status
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
@@ -16,15 +14,9 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo repoOwner
           echo envStagingRepo
 
-        status = sh(script: """
-            STATUSCODE=\$(curl --silent --output /dev/stderr --write-out "%{http_code}" -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos)
-            echo \$STATUSCODE
-          """, returnStdout: true)
-        }
-        echo "repo create returned status: ${status}"
-        if(status != 201){
-          echo "setting pullMaster to true"
-          pullMaster=true
+        sh(script: """
+            curl --silent -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos)
+          """)
         }
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
           sh """
@@ -33,10 +25,11 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             git config user.name "${USERNAME}"
             git remote add origin https://${USERNAME}:${ACCESS_TOKEN}@github.com/${repoOwner}/${envStagingRepo}.git
           """
-
-          echo "pullMaster: ${pullMaster}"
-          if(pullMaster) {
+          
+          try {
             sh 'git pull origin master'
+          } catch(e) {
+            //nothing to do, just means remote hasn't been initialized yet
           }
           writeFile file: "deploy.yml", text: deployYaml
 
