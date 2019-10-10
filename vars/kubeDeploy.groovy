@@ -5,7 +5,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
     def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
-    def pullMaster = true
+    def pullMaster = false
     def status = 200
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
@@ -23,6 +23,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         }
         echo "repo create returned status: ${status}"
         if(status!=201){
+          echo "setting pullMaster to true"
           pullMaster=true
         }
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
