@@ -19,7 +19,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
               curl -s -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/${repoOwner}/${envStagingRepo} | jq 'contains({message: "Not Found"})'
             """, returnStdout: true)
           echo "repoNotExists: ${repoNotExists}"
-          if(repoNotExists=='true') {
+          if(repoNotExists) {
             sh(script: """
                 curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
               """)
