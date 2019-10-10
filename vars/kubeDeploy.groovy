@@ -16,7 +16,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           echo envStagingRepo
 
         int status = sh(script: """
-            curl -w '%{http_code}' -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos -o /dev/null
+            curl -sLI -w '%{http_code}' -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos -o /dev/null
           """, returnStdout: true)
         }
         echo "repo create returned status: ${status}"
