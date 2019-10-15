@@ -9,5 +9,18 @@ spec:
     command:
     - /busybox/cat
     tty: true
+  containers:
+  - name: gcp-sdk
+    image: google/cloud-sdk:252.0.0-slim
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+      - name: gcp-logs
+        mountPath: /.config/gcloud/logs
+  volumes:
+  - name: gcp-logs
+    emptyDir: {}
+  serviceAccountName: cloud-run-sa
   securityContext:
     runAsUser: 0
