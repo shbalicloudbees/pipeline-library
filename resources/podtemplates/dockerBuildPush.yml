@@ -15,12 +15,6 @@ spec:
     command:
     - cat
     tty: true
-    volumeMounts:
-      - name: gcp-logs
-        mountPath: /.config/gcloud/logs
-  volumes:
-  - name: gcp-logs
-    emptyDir: {}
   serviceAccountName: cloud-run-sa
   securityContext:
     runAsUser: 0
