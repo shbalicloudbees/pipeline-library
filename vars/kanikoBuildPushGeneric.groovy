@@ -8,7 +8,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       body()
       imageNameTag()
       gitShortCommit()
-      container('cloud-run') {
+      container('gcp-sdk') {
         sh 'gcloud auth configure-docker'
       }
       container(name: 'kaniko', shell: '/busybox/sh') {
