@@ -4,15 +4,10 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug-v0.10.0
+    image: gcr.io/core-workshop/kaniko:0.1
     imagePullPolicy: Always
     command:
     - /busybox/cat
-    tty: true
-  - name: gcp-sdk
-    image: gcr.io/core-workshop/gcloud-docker-credential-gcr:0.3
-    command:
-    - cat
     tty: true
   serviceAccountName: cloud-run-sa
   securityContext:
