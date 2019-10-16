@@ -9,6 +9,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       imageNameTag()
       gitShortCommit()
       container('gcp-sdk') {
+        sh 'sleep 60000'
         sh 'gcloud auth print-access-token'
         sh 'ls -la /root/.config/gcloud/'
       }
