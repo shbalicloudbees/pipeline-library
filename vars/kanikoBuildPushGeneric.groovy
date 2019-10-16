@@ -8,17 +8,16 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       body()
       imageNameTag()
       gitShortCommit()
-      container('gcp-sdk') {
-        sh 'sleep 60000'
-        sh 'gcloud auth print-access-token'
-        sh 'ls -la /root/.config/gcloud/'
-      }
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
-            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${imageTag}
+            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} --no-push -d ${dockerReg}/${imageName}:${imageTag} 
+            
           """
         }
+      }
+      container('gcp-sdk') {
+        sh 'gcloud docker --push ${dockerReg}/${imageName}:${imageTag}'
       }
     }
   }
