@@ -10,6 +10,9 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       imageNameTag()
       gitShortCommit()   
       def repoName = env.IMAGE_REPO.toLowerCase()
+      container('gcloud') {
+       sh 'gcloud auth configure-docker' 
+      }
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
