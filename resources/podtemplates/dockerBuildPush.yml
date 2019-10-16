@@ -1,20 +1,14 @@
 kind: Pod
 metadata:
-  name: img
-  labels:
-    run: img
-  annotations:
-    container.apparmor.security.beta.kubernetes.io/img: unconfined
+  name: kaniko
 spec:
   containers:
-  - name: img
-    image: r.j3ss.co/img:v0.5.7
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug-v0.10.0
     imagePullPolicy: Always
     command:
-    - cat
+    - /busybox/cat
     tty: true
-    securityContext:
-      procMount: Unmasked
   - name: gcp-sdk
     image: gcr.io/core-workshop/gcloud-docker-credential-gcr:0.3
     command:
@@ -22,4 +16,4 @@ spec:
     tty: true
   serviceAccountName: cloud-run-sa
   securityContext:
-    runAsUser: 1000
+    runAsUser: 0
