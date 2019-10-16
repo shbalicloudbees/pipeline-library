@@ -1,14 +1,16 @@
 kind: Pod
 metadata:
-  name: kaniko
+  name: img
 spec:
   containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug-v0.10.0
+  - name: img
+    image: r.j3ss.co/img:v0.5.7
     imagePullPolicy: Always
     command:
-    - /busybox/cat
+    - cat
     tty: true
+    securityContext:
+      procMount: Unmasked
   - name: gcp-sdk
     image: gcr.io/core-workshop/gcloud-docker-credential-gcr:0.3
     command:
@@ -16,4 +18,4 @@ spec:
     tty: true
   serviceAccountName: cloud-run-sa
   securityContext:
-    runAsUser: 0
+    runAsUser: 1000
