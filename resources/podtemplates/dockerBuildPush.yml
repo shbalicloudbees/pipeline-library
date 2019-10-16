@@ -9,11 +9,5 @@ spec:
     command:
     - /busybox/cat
     tty: true
-  - name: gcloud
-    image: google/cloud-sdk:252.0.0-slim
-    command:
-    - cat
-    tty: true
-  serviceAccountName: cloud-run-sa
   securityContext:
     runAsUser: 0
