@@ -11,7 +11,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       container('gcp-sdk') {
         sh 'gcloud auth print-access-token'
         sh 'gcloud beta auth print-identity-token'
-        sh 'echo \$GOOGLE_APPLICATION_CREDENTIALS'
+        sh 'echo /root/.config/gcloud/application_default_credentials.json'
       }
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
