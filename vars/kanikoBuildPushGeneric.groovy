@@ -17,7 +17,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         }
       }
       container('gcp-sdk') {
-        sh 'gcloud docker --push ${dockerReg}/${imageName}:${imageTag}'
+        sh 'gcloud docker -- push ${dockerReg}/${imageName}:${imageTag}'
       }
     }
   }
