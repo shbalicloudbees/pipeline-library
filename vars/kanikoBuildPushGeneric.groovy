@@ -9,7 +9,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       imageNameTag()
       gitShortCommit()
       container('gcp-sdk') {
-        sh 'gcloud auth application-default login --quiet'
+        sh 'gcloud auth print-access-token'
       }
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
