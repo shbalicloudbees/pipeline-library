@@ -1,20 +1,20 @@
 // vars/kanikoBuildPush.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", String target = ".", String dockerFile="Dockerfile", Closure body) {
   def dockerReg = "gcr.io/${gcpProject}"
-  def label = "img-${UUID.randomUUID().toString()}"
+  def label = "kaniko-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
-  podTemplate(name: 'img', label: label, yaml: podYaml, nodeSelector: 'type=agent') {
+  podTemplate(name: 'kaniko', label: label, yaml: podYaml, nodeSelector: 'type=agent') {
     node(label) {
       body()
       imageNameTag()
       gitShortCommit()
-      container('gcp-sdk') {
-        sh "gcloud auth configure-docker"
-      }
-      container('img') {
-        sh """
-          img build -t ${dockerReg}/${imageName}:${imageTag} .  
-        """
+      container(name: 'kaniko', shell: '/busybox/sh') {
+        withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+          sh """#!/busybox/sh
+            /kaniko/docker-credential-gcr config --token-source='gcloud'
+            /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${imageTag}
+          """
+        }
       }
     }
   }
