@@ -11,10 +11,9 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       container('gcp-sdk') {
         sh 'docker-credential-gcr config --token-source="gcloud"'
         sh 'docker-credential-gcr configure-docker'
-        sh 'echo "https://gcr.io" | docker-credential-gcr get'
-        sh 'ls -a /root'
-        sh 'mkdir -p /kaniko/.docker/'
-        sh 'cp /root/.docker/config.json /kaniko/.docker/config.json'
+        sh 'echo "https://gcr.io" | docker-credential-gcr get > kaniko-secret.json'
+        sh 'more kaniko-secret.json'
+        sh 'export GOOGLE_APPLICATION_CREDENTIALS=kaniko-secret.json'
       }
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
