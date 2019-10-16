@@ -13,11 +13,12 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         sh 'docker-credential-gcr configure-docker'
         sh 'echo "https://gcr.io" | docker-credential-gcr get'
         sh 'ls -a /root'
+        sh 'mkdir -p /kaniko/.docker/'
+        sh 'cp /root/.docker/config.json /kaniko/.docker/config.json'
       }
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
-            cp /root/.docker/config.json /kaniko/.docker/config.json
             /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor=${env.COMMIT_AUTHOR} -d ${dockerReg}/${imageName}:${imageTag}
           """
         }
