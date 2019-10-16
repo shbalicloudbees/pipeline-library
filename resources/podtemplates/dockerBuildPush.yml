@@ -4,11 +4,10 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/core-workshop/kaniko:0.1
+    image: gcr.io/core-workshop/kaniko:0.2
     imagePullPolicy: Always
     command:
     - /busybox/cat
     tty: true
-  serviceAccountName: cloud-run-sa
   securityContext:
     runAsUser: 0
