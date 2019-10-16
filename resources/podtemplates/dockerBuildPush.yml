@@ -10,7 +10,7 @@ spec:
     - /busybox/cat
     tty: true
   - name: gcp-sdk
-    image: google/cloud-sdk:252.0.0-slim
+    image: gcr.io/core-workshop/gcloud-docker-credential-gcr:0.1
     command:
     - cat
     tty: true
