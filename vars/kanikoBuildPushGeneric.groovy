@@ -10,6 +10,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       gitShortCommit()
       container('gcp-sdk') {
         sh 'docker-credential-gcr config --token-source="gcloud"'
+        sh 'docker-credential-gcr configure-docker'
         sh 'echo "https://gcr.io" | docker-credential-gcr get'
         sh 'docker-credential-gcr gcr-login'
         sh 'ls -a /root'
