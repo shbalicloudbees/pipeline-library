@@ -11,7 +11,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       container('gcp-sdk') {
         sh 'docker-credential-gcr config --token-source="gcloud"'
         sh 'echo "https://gcr.io" | docker-credential-gcr get'
-        sh 'ls -a'
+        sh 'ls -a /root'
       }
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
