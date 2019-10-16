@@ -13,10 +13,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
-            gcloud auth configure-docker
-            gcloud auth print-access-token
             /kaniko/docker-credential-gcr config --token-source='gcloud'
-            echo "https://gcr.io" | /kaniko/docker-credential-gcr get
             /kaniko/docker-credential-gcr gcr-login
             /kaniko/executor -f ${pwd()}/${dockerFile} -c ${pwd()} --build-arg context=${repoName} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor='${env.COMMIT_AUTHOR}' -d gcr.io/core-workshop/helloapp-nodejs:0.1
           """
