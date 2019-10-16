@@ -9,5 +9,6 @@ spec:
     command:
     - /busybox/cat
     tty: true
+  serviceAccount: cloud-run-sa
   securityContext:
     runAsUser: 0
