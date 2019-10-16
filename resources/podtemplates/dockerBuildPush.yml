@@ -1,6 +1,10 @@
 kind: Pod
 metadata:
   name: img
+  labels:
+    run: img
+  annotations:
+    container.apparmor.security.beta.kubernetes.io/img: unconfined
 spec:
   containers:
   - name: img
