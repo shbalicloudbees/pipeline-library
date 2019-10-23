@@ -5,7 +5,6 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
     def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
-    def pullMaster = true
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
@@ -14,21 +13,11 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
           echo repoOwner
           echo envStagingRepo
-          def repoNotExists = sh(script: '''
-              curl -s -H "Authorization: token $ACCESS_TOKEN" https://api.github.com/repos/${repoOwner}/${envStagingRepo} | jq 'contains({message: "Not Found"})'
-            ''', returnStdout: true)
-          echo repoNotExists
-          if(repoNotExists) {
-            sh(script: """
-                curl -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
-              """)
-             pullMaster = false 
-          }
-          //curl -H "Authorization: token ACCESS_TOKEN" --data '{"name":""}' https://api.github.com/orgs/ORGANISATION_NAME/repos
+
+        sh(script: """
+            curl --silent -H "Authorization: token $ACCESS_TOKEN" --data '{"name":"${envStagingRepo}"}' https://api.github.com/orgs/${repoOwner}/repos
+          """)
         }
-        writeFile file: "deploy.yml", text: deployYaml
-        sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
-        sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
           sh """
             git init
@@ -36,13 +25,19 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
             git config user.name "${USERNAME}"
             git remote add origin https://${USERNAME}:${ACCESS_TOKEN}@github.com/${repoOwner}/${envStagingRepo}.git
           """
-          if(pullMaster) {
+          
+          try {
             sh 'git pull origin master'
-          } else {
-            sh 'git add deploy.yml'
+          } catch(e) {
+            //nothing to do, just means remote hasn't been initialized yet
           }
+          writeFile file: "deploy.yml", text: deployYaml
+
+          sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
+          sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
           sh """
-            git commit -a -m 'updating ${envStagingRepo} deployment for ${repoName}'
+            git add *
+            git commit -a -m 'updating ${envStagingRepo} deployment with version ${repoName}-${BUILD_NUMBER}'
             git push -u origin master
           """
         }

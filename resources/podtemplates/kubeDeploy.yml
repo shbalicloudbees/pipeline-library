@@ -2,6 +2,7 @@ kind: Pod
 metadata:
   name: kubectl
 spec:
+  serviceAccountName: jenkins
   containers:
   - name: kubectl
     image: gcr.io/cloud-builders/kubectl
