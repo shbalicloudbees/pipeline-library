@@ -2,6 +2,7 @@
 def call(Map config) {
   def podYaml = libraryResource 'podtemplates/cloud-run.yml'
   def label = "cloudrun-${UUID.randomUUID().toString()}"
+  println(config)
   podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml, nodeSelector: 'type=agent') {
     node(label) {
       container(name: 'gcp-sdk') {
