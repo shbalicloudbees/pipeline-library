@@ -9,7 +9,7 @@ spec:
     runAsUser: 1000
   containers:
   - name: img-gcloud
-    image: gcr.io/core-workshop/img-gcloud:sha256:a97a9f1c4d321e210159b2d44a4f6c3784bb0bd261cbff1f0271908fc6613a59
+    image: gcr.io/core-workshop/img-gcloud@sha256:a97a9f1c4d321e210159b2d44a4f6c3784bb0bd261cbff1f0271908fc6613a59
     imagePullPolicy: Always
     command:
     - cat
