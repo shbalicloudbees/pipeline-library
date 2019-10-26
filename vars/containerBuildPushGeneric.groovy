@@ -6,7 +6,6 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   podTemplate(name: 'img-gcloud', label: label, yaml: podYaml, nodeSelector: 'type=agent') {
     node(label) {
       body()
-      imageNameTag()
       gitShortCommit()
       container('img-gcloud') {
         sh """
