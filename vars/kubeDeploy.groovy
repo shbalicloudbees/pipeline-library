@@ -3,11 +3,12 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
     def label = "kubectl"
     def podYaml = libraryResource 'podtemplates/kubeDeploy.yml'
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
-    def repoName = env.IMAGE_REPO.toLowerCase()
     def envStagingRepo = "environment_staging"
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
+        imageNameTag()
+        def repoName = env.IMAGE_REPO.toLowerCase()
         //create environment repo for prod if it doesn't already exist
         echo githubCredentialId
         withCredentials([usernamePassword(credentialsId: githubCredentialId, usernameVariable: 'USERNAME', passwordVariable: 'ACCESS_TOKEN')]) {
