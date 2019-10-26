@@ -11,7 +11,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       container('img-gcloud') {
         sh """
           img build --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
-          /home/user/google-cloud-sdk/bin/gcloud  auth configure-docker
+          /home/user/google-cloud-sdk/bin/gcloud  auth configure-docker --quiet
           img push ${dockerReg}/${imageName}:${imageTag}
         """
       }
