@@ -1,13 +1,33 @@
 kind: Pod
 metadata:
-  name: kaniko
+  name: img-gcloud
+  annotations:
+    container.apparmor.security.beta.kubernetes.io/img: unconfined
+    container.seccomp.security.alpha.kubernetes.io/img: unconfined
 spec:
+  securityContext:
+    runAsUser: 1000
   containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug-v0.10.0
+  - name: img-gcloud
+    image: gcr.io/core-workshop/img-gcloud:cd2386908e4d4e540025d8750d8d53bb727af916
     imagePullPolicy: Always
     command:
-    - /busybox/cat
+    - cat
     tty: true
-  securityContext:
-    runAsUser: 0
+    # securityContext:
+    #   procMount: Unmasked
+    volumeMounts:
+    - name: docker-config
+      mountPath: /.docker/
+    - name: gcloud-config
+      mountPath: /.config/gcloud
+    - name: cache-volume
+      mountPath: /tmp/
+  volumes:
+  - name: docker-config
+    emptyDir: {}
+  - name: gcloud-config
+    emptyDir: {}
+  - name: cache-volume
+    emptyDir: {}
+  restartPolicy: Never
