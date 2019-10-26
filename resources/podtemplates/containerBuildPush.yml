@@ -1,14 +1,12 @@
 kind: Pod
 metadata:
   name: img-gcloud
-  namespace: cloud-run
   labels:
     run: img-gcloud
   annotations:
     container.apparmor.security.beta.kubernetes.io/img-gcloud: unconfined
     container.seccomp.security.alpha.kubernetes.io/img-gcloud: unconfined
 spec:
-  serviceAccount: cloud-run-sa
   securityContext:
     runAsUser: 1000
   containers:
