@@ -3,7 +3,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   def dockerReg = "gcr.io/${gcpProject}"
   def label = "kaniko-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
-  podTemplate(name: 'kaniko', label: label, yaml: podYaml, nodeSelector: 'type=agent') {
+  podTemplate(name: 'kaniko', label: label, yaml: podYaml, nodeSelector: 'workload=general') {
     node(label) {
       body()
       imageNameTag()
