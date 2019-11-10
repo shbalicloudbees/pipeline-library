@@ -5,7 +5,7 @@ def call(Map config) {
   podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml, nodeSelector: 'workload=general') {
     node(label) {
       container(name: 'gcp-sdk') {
-        echo "deployType = ${config.deployType}"
+        echo "region = ${config.region}"
         if (config.deployType == "gke") {
           sh "gcloud beta run services delete ${config.serviceName} --platform gke --cluster ${config.clusterName} --cluster-location ${config.region} --namespace ${config.namespace}"
         }
