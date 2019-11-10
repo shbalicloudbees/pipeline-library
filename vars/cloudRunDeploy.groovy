@@ -2,7 +2,7 @@
 def call(Map config) {
   def podYaml = libraryResource 'podtemplates/cloud-run.yml'
   def label = "cloudrun-${UUID.randomUUID().toString()}"
-  podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml, nodeSelector: 'type=agent') {
+  podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml, nodeSelector: 'workload=general') {
     node(label) {
       container(name: 'gcp-sdk') {
         if (config.deployType == "gke") {
