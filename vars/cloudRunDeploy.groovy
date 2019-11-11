@@ -20,7 +20,7 @@ def call(Map config) {
       sh "cat run.json"
       CLOUD_RUN_URL = sh (script: "cat run.json | jq -r '.status.url' | tr -d '\n'", 
                 returnStdout: true)
-      withCredentials([usernamePassword(credentialsId: "cbdays-github-token", usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
+      withCredentials([usernamePassword(credentialsId: "${credId}", usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
         sh """
           curl -s -H "Authorization: token ${TOKEN}" \
             -X POST -d '{"body": "Preview Environment URL: ${CLOUD_RUN_URL}"}' \
