@@ -14,7 +14,7 @@ def call(Map config) {
         }
         else {
           sh "gcloud beta run deploy ${config.serviceName} --image ${config.image} --allow-unauthenticated --region ${config.region} --platform managed --format=json"
-          sh "gcloud beta run services describe ${config.serviceName} --region ${config.region} --platform managed --format=json > run.json 2>&1 "
+          sh "gcloud beta run services describe ${config.serviceName} --region ${config.region} --platform managed --format=json > run.json 2>&1"
         } 
       }
       sh "cat run.json"
