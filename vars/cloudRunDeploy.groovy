@@ -25,6 +25,7 @@ def call(Map config) {
             "https://api.github.com/repos/cloudbees-days/blog/issues/10/comments"
         """
       }
+      echo repoOwner
     }
   }
 }
