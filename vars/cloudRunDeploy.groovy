@@ -17,6 +17,7 @@ def call(Map config) {
           sh "gcloud beta run services describe ${config.serviceName} --region ${config.region} --platform managed --format=json > run.json 2>&1 "
         } 
       }
+      sh "cat run.json"
       CLOUD_RUN_URL = sh (script: "cat run.json | jq -r '.url' | tr -d '\n'", 
                 returnStdout: true)
       withCredentials([usernamePassword(credentialsId: 'cbdays-github-token', usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
