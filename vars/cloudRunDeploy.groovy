@@ -19,7 +19,10 @@ def call(Map config) {
           sh "gcloud beta run services describe ${config.serviceName} --region ${config.region} --platform managed --format=json > run.json 2>&1"
         } 
       }
+      //print detail description of deployed servce
       sh "cat run.json"
+      
+      //only add comment for PRs - CHANGE_ID isn't populated for commits to regular branches
       if (env.CHANGE_ID) {
         CLOUD_RUN_URL = sh (script: "cat run.json | jq -r '.status.url' | tr -d '\n'", 
                   returnStdout: true)
