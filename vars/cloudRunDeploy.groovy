@@ -3,7 +3,7 @@ def call(Map config) {
   def podYaml = libraryResource 'podtemplates/cloud-run.yml'
   def label = "cloudrun-${UUID.randomUUID().toString()}"
   def CLOUD_RUN_URL
-  podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml, nodeSelector: 'workload=general') {
+  podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml) {
     node(label) {
       container(name: 'gcp-sdk') {
         if (config.deployType == "gke") {
@@ -26,13 +26,12 @@ def call(Map config) {
       if (env.CHANGE_ID) {
         CLOUD_RUN_URL = sh (script: "cat run.json | jq -r '.status.url' | tr -d '\n'", 
                   returnStdout: true)
-        withCredentials([usernamePassword(credentialsId: "${credId}", usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
-          sh """
-            curl -s -H "Authorization: token ${TOKEN}" \
-              -X POST -d '{"body": "Preview Environment URL: ${CLOUD_RUN_URL}"}' \
-              "https://api.github.com/repos/${repoOwner}/${repo}/issues/${env.CHANGE_ID}/comments"
-          """
-        }
+        config.message = "Preview Environment URL: ${CLOUD_RUN_URL}"
+        config.credId = credId
+        config.issueId = env.CHANGE_ID
+        config.repoOwner = repoOwner
+        config.repo = repo
+        gitHubComment(config)
       }
     }
   }
