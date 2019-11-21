@@ -16,9 +16,6 @@ spec:
     command:
     - cat
     tty: true
-    securityContext:
-      privileged: true
-    #  procMount: Unmasked
     volumeMounts:
     - name: docker-config
       mountPath: /.docker/
