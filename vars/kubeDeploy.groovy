@@ -34,7 +34,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           }
           writeFile file: "deploy.yml", text: deployYaml
 
-          sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/core-workshop/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
+          sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/preview-demo/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
           sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
           sh """
             git add *
