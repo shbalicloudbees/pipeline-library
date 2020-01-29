@@ -1,5 +1,5 @@
 // vars/kubeDeploy.groovy
-def call(imageName, imageTag, githubCredentialId, repoOwner) {
+def call(String imageName, String imageTag, String githubCredentialId, String repoOwner, String gcpProject = "core-workshop") {
     def label = "kubectl"
     def podYaml = libraryResource 'podtemplates/kubeDeploy.yml'
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
@@ -34,7 +34,7 @@ def call(imageName, imageTag, githubCredentialId, repoOwner) {
           }
           writeFile file: "deploy.yml", text: deployYaml
 
-          sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/preview-demo/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
+            sh("sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/${gcpProject}/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml")
           sh("sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml")
           sh """
             git add *
