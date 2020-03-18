@@ -1,0 +1,10 @@
+kind: Pod
+metadata:
+  name: maven-make
+spec:
+  containers:
+  - name: jdk8-maven-make
+    image: johns2te/maven_make:latest
+    command:
+    - cat
+    tty: true
