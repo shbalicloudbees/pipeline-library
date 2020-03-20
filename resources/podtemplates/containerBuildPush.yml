@@ -7,6 +7,7 @@ metadata:
     container.apparmor.security.beta.kubernetes.io/img-gcloud: unconfined
     container.seccomp.security.alpha.kubernetes.io/img-gcloud: unconfined
 spec:
+  serviceAccount: jenkins
   securityContext:
     runAsUser: 1000
   containers:
@@ -16,8 +17,6 @@ spec:
     command:
     - cat
     tty: true
-    # securityContext:
-    #   procMount: Unmasked
     volumeMounts:
     - name: docker-config
       mountPath: /.docker/
