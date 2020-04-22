@@ -1,7 +1,7 @@
 // vars/kubeDeploy.groovy
 def call(imageName, gcpProject, githubCredentialId, repoOwner) {
     def label = "kubectl"
-    def podYaml = libraryResource 'podtemplates/kubeDeploy.yml'
+    def podYaml = libraryResource 'podtemplates/kubectl.yml'
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
     def envStagingRepo = "environment_staging"
     
