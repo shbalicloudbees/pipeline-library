@@ -7,13 +7,14 @@ def call(String repoName, String repoOwner, String registry, Closure body) {
     node(label) {
       body()
       script {
-        env.VERSION = (readFile 'version.txt').trim()
+        env.VERSION = readFile 'version.txt'
+        env.VERSION = env.VERSION.trim()
       }
       imageNameTag()
       gitShortCommit()
       container('img') {
         sh """
-          img build --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${registry}/${repoOwner}/${imageName}:${env.VERSION.trim()} ${pwd()}
+          img build --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${registry}/${repoOwner}/${imageName}:${env.VERSION} ${pwd()}
           img push ${registry}/${repoOwner}/${imageName}:${env.VERSION}
         """
       }
