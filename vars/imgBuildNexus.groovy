@@ -1,7 +1,8 @@
 // vars/imgBuildNexus.groovy
-def call(String imageName, String repoOwner, String registry, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
+def call(String repoName, String repoOwner, String registry, String imageTag = env.BUILD_NUMBER, String target = ".", String dockerFile="Dockerfile", Closure body) {
   def label = "img-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/imageBuildPushNexus.yml'
+  def imageName = repoName.toLowerCase()
   podTemplate(name: 'img', label: label, yaml: podYaml) {
     node(label) {
       body()
