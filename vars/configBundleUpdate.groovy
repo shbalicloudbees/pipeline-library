@@ -1,5 +1,6 @@
 // vars/configBundleUpdate.groovy
-def call(String masterName, String nameSpace = "cloudbees-core") {
+def call(String nameSpace = "cloudbees-core") {
+  def masterName = System.properties.'MASTER_NAME'
   def label = "kubectl"
   def podYaml = libraryResource 'podtemplates/kubectl.yml'
   
