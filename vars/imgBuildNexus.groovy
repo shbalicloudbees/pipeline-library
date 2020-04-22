@@ -7,7 +7,7 @@ def call(String repoName, String repoOwner, String registry, Closure body) {
     node(label) {
       body()
       script {
-        env.VERSION = readFile 'version.txt'
+        env.VERSION = (readFile 'version.txt').trim()
       }
       imageNameTag()
       gitShortCommit()
