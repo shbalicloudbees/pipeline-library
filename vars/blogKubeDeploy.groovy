@@ -9,9 +9,9 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         body()
         repoName = repoName.toLowerCase()
         repoOwner = repoOwner.toLowerCase()
-        sh("sed -i.bak 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
-        sh("sed -i.bak 's#REPLACE_HOSTNAME#staging.${repoOwner}.${deploymentDomain}#' .kubernetes/frontend.yaml")
-        sh("sed -i.bak 's#REPLACE_REPO_OWNER#/${repoOwner}#' .kubernetes/frontend.yaml")
+        sh("sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
+        sh("sed -i 's#REPLACE_HOSTNAME#staging.${repoOwner}.${deploymentDomain}#' .kubernetes/frontend.yaml")
+        sh("sed -i 's#REPLACE_REPO_OWNER#${repoOwner}#' .kubernetes/frontend.yaml")
         container("kubectl") {
           sh "cat .kubernetes/frontend.yaml"
           sh "kubectl apply -f .kubernetes/frontend.yaml"
