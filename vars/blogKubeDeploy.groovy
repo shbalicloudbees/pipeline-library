@@ -7,9 +7,10 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
         imageNameTag()
-        def imageName = repoName.toLowerCase()
+        repoName = repoName.toLowerCase()
+        repoOwner = repoOwner.toLowerCase()
         checkout scm
-        sh("sed -i.bak 's#REPLACE_IMAGE#${dockerRegistryDomain}/${imageName}:${env.VERSION}#' .kubernetes/frontend.yaml")
+        sh("sed -i.bak 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
         sh("sed -i.bak 's#REPLACE_HOSTNAME#staging.${repoOwner}.${deploymentDomain}#' .kubernetes/frontend.yaml")
         sh("sed -i.bak 's#REPLACE_PATH#/${repoOwner}#' .kubernetes/frontend.yaml")
         container("kubectl") {
