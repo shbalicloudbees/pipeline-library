@@ -12,7 +12,6 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         imageTag = env.VERSION
       } catch(e) {}
       imageName = imageName.toLowerCase()
-      gitShortCommit()
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
