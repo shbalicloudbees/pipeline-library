@@ -3,7 +3,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   def dockerReg = "gcr.io/${gcpProject}"
   def label = "kaniko-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/kaniko.yml'
-  podTemplate(name: 'kaniko', label: label, yaml: podYaml') {
+  podTemplate(name: 'kaniko', label: label, yaml: podYaml) {
     node(label) {
       body()
       try {
