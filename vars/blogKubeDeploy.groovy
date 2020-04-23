@@ -1,15 +1,15 @@
 // vars/kubeDeploy.groovy
-def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject = "core-workshop") {
+def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject = "core-workshop", Closure body) {
     def label = "kubectl"
     def podYaml = libraryResource 'podtemplates/kubectl.yml'
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
     
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
+        body()
         imageNameTag()
         repoName = repoName.toLowerCase()
         repoOwner = repoOwner.toLowerCase()
-        checkout scm
         sh("sed -i.bak 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
         sh("sed -i.bak 's#REPLACE_HOSTNAME#staging.${repoOwner}.${deploymentDomain}#' .kubernetes/frontend.yaml")
         sh("sed -i.bak 's#REPLACE_PATH#/${repoOwner}#' .kubernetes/frontend.yaml")
