@@ -9,12 +9,12 @@ def call(String repoName, String repoOwner, String registry, Closure body) {
         env.VERSION = readFile 'version.txt'
         env.VERSION = env.VERSION.trim()
       }
-      def imageName = "${repoOwner}/${repoName}"
-      imageName = imageName.toLowerCase()
+      repoName = repoName.toLowerCase()
+      repoOwner = repoOwner.toLowerCase()
       container('img') {
         sh """
-          img build --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${registry}/${imageName}:${env.VERSION} ${pwd()}
-          img push ${registry}/${imageName}:${env.VERSION}
+          img build --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${registry}/${repoOwner}/${repoName}:${env.VERSION} ${pwd()}
+          img push ${registry}/${repoOwner}/${repoName}:${env.VERSION}
         """
       }
     }
