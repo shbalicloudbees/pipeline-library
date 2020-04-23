@@ -2,7 +2,8 @@
 def call(String repoName, String repoOwner, String registry, Closure body) {
   def label = "img-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/imageBuildPushNexus.yml'
-  def imageName = repoOwner.toLowerCase() + "/" + repoName.toLowerCase()
+  def imageName = "${repoOwner}/${repoName}"
+  imageName = imageName.toLowerCase()
   podTemplate(name: 'img', label: label, yaml: podYaml) {
     node(label) {
       body()
