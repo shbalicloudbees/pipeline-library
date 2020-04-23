@@ -8,3 +8,9 @@ spec:
     command:
     - cat
     tty: true
+    volumeMounts:
+    - name: cache-volume
+      mountPath: /.local/
+  volumes:
+  - name: cache-volume
+    emptyDir: {}
