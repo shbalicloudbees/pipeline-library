@@ -1,11 +1,16 @@
 // vars/kanikoBuildPush.groovy
-def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", String target = ".", String dockerFile="Dockerfile", Closure body) {
+def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", Closure body) {
   def dockerReg = "gcr.io/${gcpProject}"
   def label = "img-gcloud-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/containerBuildPush.yml'
-  podTemplate(name: 'img-gcloud', label: label, yaml: podYaml, nodeSelector: 'workload=general') {
+  podTemplate(name: 'img-gcloud', label: label, yaml: podYaml) {
     node(label) {
       body()
+      try {
+        env.VERSION = readFile 'version.txt'
+        env.VERSION = env.VERSION.trim()
+        imageTag = env.VERSION
+      } catch(e) {}
       gitShortCommit()
       container('img-gcloud') {
         sh """
