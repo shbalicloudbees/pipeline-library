@@ -11,6 +11,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         env.VERSION = env.VERSION.trim()
         imageTag = env.VERSION
       } catch(e) {}
+      imageName = imageName.toLowerCase()
       gitShortCommit()
       container('img-gcloud') {
         sh """
