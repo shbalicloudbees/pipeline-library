@@ -10,7 +10,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         repoName = repoName.toLowerCase()
         repoOwner = repoOwner.toLowerCase()
         sh("sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/backend.yaml")
-        sh("sed -i 's#REPLACE_HOSTNAME#staging.${repoOwner}.${deploymentDomain}#' .kubernetes/backend.yaml")
+        sh("sed -i 's#REPLACE_HOSTNAME#staging.${repoName}.${deploymentDomain}#' .kubernetes/backend.yaml")
         container("kubectl") {
           sh "cat .kubernetes/postgres.yaml"
           sh "kubectl apply -f .kubernetes/postgres.yaml"
