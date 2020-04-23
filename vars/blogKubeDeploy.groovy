@@ -7,7 +7,6 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
     podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
       node(label) {
         body()
-        imageNameTag()
         repoName = repoName.toLowerCase()
         repoOwner = repoOwner.toLowerCase()
         sh("sed -i.bak 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
