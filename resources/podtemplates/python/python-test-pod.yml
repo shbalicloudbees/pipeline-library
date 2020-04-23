@@ -10,7 +10,11 @@ spec:
     tty: true
     volumeMounts:
     - name: cache-volume
+      mountPath: /.cache/
+    - name: local-volume
       mountPath: /.local/
   volumes:
   - name: cache-volume
+    emptyDir: {}
+  - name: local-volume
     emptyDir: {}
