@@ -2,8 +2,6 @@
 def call(String repoName, String repoOwner, String registry, Closure body) {
   def label = "img-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/imageBuildPushNexus.yml'
-  def imageName = "${repoOwner}/${repoName}"
-  imageName = imageName.toLowerCase()
   podTemplate(name: 'img', label: label, yaml: podYaml) {
     node(label) {
       body()
@@ -11,7 +9,8 @@ def call(String repoName, String repoOwner, String registry, Closure body) {
         env.VERSION = readFile 'version.txt'
         env.VERSION = env.VERSION.trim()
       }
-      imageNameTag()
+      def imageName = "${repoOwner}/${repoName}"
+      imageName = imageName.toLowerCase()
       container('img') {
         sh """
           img build --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${registry}/${imageName}:${env.VERSION} ${pwd()}
