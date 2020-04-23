@@ -1,13 +1,17 @@
 // vars/kanikoBuildPush.groovy
-def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", String target = ".", String dockerFile="Dockerfile", Closure body) {
+def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", String dockerFile="Dockerfile", Closure body) {
   def dockerReg = "gcr.io/${gcpProject}"
   def label = "kaniko-${UUID.randomUUID().toString()}"
-  def podYaml = libraryResource 'podtemplates/dockerBuildPush.yml'
-  podTemplate(name: 'kaniko', label: label, yaml: podYaml, nodeSelector: 'workload=general') {
+  def podYaml = libraryResource 'podtemplates/kaniko.yml'
+  podTemplate(name: 'kaniko', label: label, yaml: podYaml) {
     node(label) {
       body()
-      imageNameTag()
-      gitShortCommit()
+      try {
+        env.VERSION = readFile 'version.txt'
+        env.VERSION = env.VERSION.trim()
+        imageTag = env.VERSION
+      } catch(e) {}
+      imageName = imageName.toLowerCase()
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh """#!/busybox/sh
