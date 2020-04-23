@@ -16,7 +16,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
           sh "kubectl apply -f .kubernetes/postgres.yaml"
           sh "cat .kubernetes/backend.yaml"
           sh "kubectl apply -f .kubernetes/backend.yaml"
-          sh "echo 'deployed to http://${repoOwner}.${deploymentDomain}'"
+          sh "echo 'deployed to http://staging.${repoName}.${deploymentDomain}'"
         }
       }
     }
