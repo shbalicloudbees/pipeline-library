@@ -1,4 +1,4 @@
-// vars/kubeDeploy.groovy
+// vars/blogKubeDeploy.groovy
 def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject = "core-workshop", Closure body) {
     def label = "kubectl"
     def podYaml = libraryResource 'podtemplates/kubectl.yml'
