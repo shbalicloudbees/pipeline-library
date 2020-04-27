@@ -11,10 +11,13 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         env.VERSION = env.VERSION.trim()
         imageTag = env.VERSION
       } catch(e) {}
+      if(env.EVENT_PUSH_IMAGE_TAG) {
+        customBuildArg = "node:${env.EVENT_PUSH_IMAGE_TAG}"
+      }
       imageName = imageName.toLowerCase()
       container('img-gcloud') {
         sh """
-          img build --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
+          img build --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
           gcloud  auth configure-docker --quiet
           img push ${dockerReg}/${imageName}:${imageTag}
         """
