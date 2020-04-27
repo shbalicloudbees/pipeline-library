@@ -1,4 +1,4 @@
-// vars/kanikoBuildPush.groovy
+// vars/containerBuildPushGeneric.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", Closure body) {
   def dockerReg = "gcr.io/${gcpProject}"
   def label = "img-gcloud-${UUID.randomUUID().toString()}"
