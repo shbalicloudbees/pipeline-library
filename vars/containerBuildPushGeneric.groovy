@@ -3,7 +3,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   def dockerReg = "gcr.io/${gcpProject}"
   def label = "img-gcloud-${UUID.randomUUID().toString()}"
   def podYaml = libraryResource 'podtemplates/containerBuildPush.yml'
-  def customBuildArg
+  def customBuildArg = ""
   podTemplate(name: 'img-gcloud', label: label, yaml: podYaml) {
     node(label) {
       body()
