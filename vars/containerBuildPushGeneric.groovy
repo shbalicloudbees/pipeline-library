@@ -10,6 +10,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       try {
         env.VERSION = readFile 'version.txt'
         env.VERSION = env.VERSION.trim()
+        env.VERSION = "${env.VERSION}.${BUILD_NUMBER}"
         imageTag = env.VERSION
       } catch(e) {}
       if(env.EVENT_PUSH_IMAGE_TAG) {
