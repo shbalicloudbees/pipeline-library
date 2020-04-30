@@ -10,7 +10,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         body()
         repoName = repoName.toLowerCase()
         repoOwner = repoOwner.toLowerCase()
-        if($BRANCHNAME == "master") {
+        if(env.BRANCH_NAME == "master") {
           hostPrefix = "production"
         }
         sh("sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
