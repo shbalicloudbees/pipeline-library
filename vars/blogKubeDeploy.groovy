@@ -10,9 +10,10 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         repoName = repoName.toLowerCase()
         repoOwner = repoOwner.toLowerCase()
         sh("sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
-          sh("sed -i 's#REPLACE_HOSTNAME#staging.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml")
+        sh("sed -i 's#REPLACE_HOSTNAME#staging.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml")
         sh("sed -i 's#REPLACE_REPO_OWNER#${repoOwner}#' .kubernetes/frontend.yaml")
         container("kubectl") {
+          sh "kubectl delete deployment/microblog-frontend-${repoOwner} svc/microblog-frontend-${repoOwner}"
           sh "cat .kubernetes/frontend.yaml"
           sh "kubectl apply -f .kubernetes/frontend.yaml"
           sh "echo 'deployed to http://staging.${repoOwner}-${repoName}.${deploymentDomain}'"
