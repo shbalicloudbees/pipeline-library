@@ -5,7 +5,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   def podYaml = libraryResource 'podtemplates/containerBuildPush.yml'
   def customBuildArg = ""
   def buildModeArg = ""
-  podTemplate(name: 'img-gcloud', label: label, yaml: podYaml) {
+  podTemplate(name: 'img', label: label, yaml: podYaml) {
     node(label) {
       body()
       try {
@@ -21,7 +21,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         buildModeArg = "--build-arg BUILD_MODE=build:dev" 
       }
       imageName = imageName.toLowerCase()
-      container('img-gcloud') {
+      container('img') {
         sh """
           img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
           img push ${dockerReg}/${imageName}:${imageTag}
