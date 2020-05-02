@@ -13,7 +13,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         if(env.BRANCH_NAME == "master") {
           hostPrefix = "production"
         }
-        sh("sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
+        sh("sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:latest#' .kubernetes/frontend.yaml")
         sh("sed -i 's#REPLACE_HOSTNAME#${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml")
         sh("sed -i 's#REPLACE_REPO_OWNER#${repoOwner}-${hostPrefix}#' .kubernetes/frontend.yaml")
         container("kubectl") {
