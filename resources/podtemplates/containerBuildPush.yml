@@ -15,7 +15,7 @@ spec:
       privileged: true
     volumeMounts:
     - name: json-key
-      mountPath: /home/user/
+      mountPath: /home/user/key/
     - name: cache-volume
       mountPath: /tmp/
   volumes:
