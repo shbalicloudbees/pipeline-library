@@ -22,11 +22,11 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       }
       imageName = imageName.toLowerCase()
       container('gcp-sdk') {
-        sh "gcloud container images delete ${imageName}  --force-delete-tags --quiet"
+        sh "gcloud container images delete ${dockerReg}/${imageName}:latest  --force-delete-tags --quiet"
       }
       container('img') {
         sh """
-          img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
+          img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} -t ${dockerReg}/${imageName}:latest ${pwd()}
           cat /home/user/key/gcr-key.json | img login -u _json_key --password-stdin https://gcr.io
           img push ${dockerReg}/${imageName}:${imageTag}
         """
