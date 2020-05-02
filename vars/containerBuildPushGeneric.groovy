@@ -21,6 +21,9 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         buildModeArg = "--build-arg BUILD_MODE=build:dev" 
       }
       imageName = imageName.toLowerCase()
+      container('gcp-sdk') {
+        sh "gcloud container images delete ${imageName}  --force-delete-tags"
+      }
       container('img') {
         sh """
           img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
