@@ -24,6 +24,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       container('img') {
         sh """
           img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
+          cat /home/user/gcr-key.json | img login -u _json_key --password-stdin https://gcr.io
           img push ${dockerReg}/${imageName}:${imageTag}
         """
       }
