@@ -14,19 +14,14 @@ spec:
     securityContext:
       privileged: true
     volumeMounts:
-    - name: docker-config
-      mountPath: /home/user/.docker/
+    - name: json-key
+      mountPath: /home/user/
     - name: cache-volume
       mountPath: /tmp/
   volumes:
-  - name: docker-config
-    projected:
-      sources:
-      - secret:
-          name: img-push
-          items:
-           - key: .dockerconfigjson
-             path: config.json
+  - name: json-key
+    secret:
+      secretName: gcr-key
   - name: cache-volume
     emptyDir: {}
   restartPolicy: Never
