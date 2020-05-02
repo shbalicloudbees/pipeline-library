@@ -1,7 +1,7 @@
 // vars/containerBuildPushGeneric.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", Closure body) {
   def dockerReg = "gcr.io/${gcpProject}"
-  def label = "img-gcloud-${repoOwner}}"
+  def label = "img-gcloud-${repoOwner}"
   def podYaml = libraryResource 'podtemplates/containerBuildPush.yml'
   def customBuildArg = ""
   def buildModeArg = ""
