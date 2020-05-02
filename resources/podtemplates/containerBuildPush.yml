@@ -15,7 +15,7 @@ spec:
       privileged: true
     volumeMounts:
     - name: docker-config
-      mountPath: /home/jenkins/.docker/
+      mountPath: /home/user/.docker/
     - name: cache-volume
       mountPath: /tmp/
   volumes:
