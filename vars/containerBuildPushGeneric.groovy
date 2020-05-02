@@ -14,6 +14,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         env.VERSION = "${env.VERSION}-${BUILD_NUMBER}"
         imageTag = env.VERSION
         sh("sed -i 's#REPLACE_BUILD_NUMBER#${BUILD_NUMBER}#' .env.development")
+        sh("sed -i 's#REPLACE_BUILD_NUMBER#${BUILD_NUMBER}#' .env.production")
       } catch(e) {}
       if(env.EVENT_PUSH_IMAGE_TAG) {
         customBuildArg = "--build-arg NODE_IMAGE=${env.EVENT_PUSH_IMAGE_NAME}:${env.EVENT_PUSH_IMAGE_TAG}"
