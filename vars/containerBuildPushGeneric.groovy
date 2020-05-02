@@ -22,7 +22,9 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       }
       imageName = imageName.toLowerCase()
       container('gcp-sdk') {
-        sh "gcloud container images delete ${dockerReg}/${imageName}:latest  --force-delete-tags --quiet"
+        try {
+          sh "gcloud container images delete ${dockerReg}/${imageName}:latest  --force-delete-tags --quiet"
+        } catch(e) {}
       }
       container('img') {
         sh """
