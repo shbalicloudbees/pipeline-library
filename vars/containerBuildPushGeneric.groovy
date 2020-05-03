@@ -13,8 +13,6 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         env.VERSION = env.VERSION.trim()
         env.VERSION = "${env.VERSION}-${BUILD_NUMBER}"
         imageTag = env.VERSION
-        sh("sed -i 's#REPLACE_BUILD_NUMBER#${BUILD_NUMBER}#' .env.development")
-        sh("sed -i 's#REPLACE_BUILD_NUMBER#${BUILD_NUMBER}#' .env.production")
       } catch(e) {}
       if(env.EVENT_PUSH_IMAGE_TAG) {
         customBuildArg = "--build-arg NODE_IMAGE=${env.EVENT_PUSH_IMAGE_NAME}:${env.EVENT_PUSH_IMAGE_TAG}"
@@ -25,14 +23,15 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       imageName = imageName.toLowerCase()
       container('gcp-sdk') {
         try {
-          sh "gcloud container images delete ${dockerReg}/${imageName}:latest  --force-delete-tags --quiet"
+          sh "gcloud container images delete ${dockerReg}/${imageName}:\$PREVIOUS_IMAGE_TAG  --force-delete-tags --quiet"
         } catch(e) {}
       }
       container('img') {
         sh """
-          img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:latest ${pwd()}
+          img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
           cat /home/user/key/gcr-key.json | img login -u _json_key --password-stdin https://gcr.io
-          img push ${dockerReg}/${imageName}:latest
+          img push ${dockerReg}/${imageName}:${imageTag}
+          PREVIOUS_IMAGE_TAG=${imageTag}
         """
       }
     }
