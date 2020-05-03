@@ -34,7 +34,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
           cat /home/user/key/gcr-key.json | img login -u _json_key --password-stdin https://gcr.io
           img push ${dockerReg}/${imageName}:${imageTag}     
         """
-        env.prevImageTag=${imageTag}
+        env.prevImageTag=imageTag
       }
     }
   }
