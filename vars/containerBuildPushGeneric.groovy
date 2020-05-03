@@ -23,8 +23,8 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       imageName = imageName.toLowerCase()
       container('gcp-sdk') {
         try {
-          sh "echo \$PREVIOUS_IMAGE_TAG"
-          sh "gcloud container images delete ${dockerReg}/${imageName}:\$PREVIOUS_IMAGE_TAG  --force-delete-tags --quiet"
+          sh "echo $$PREVIOUS_IMAGE_TAG"
+          sh "gcloud container images delete ${dockerReg}/${imageName}:$$PREVIOUS_IMAGE_TAG  --force-delete-tags --quiet"
         } catch(e) {}
       }
       container('img') {
@@ -32,7 +32,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
           img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
           cat /home/user/key/gcr-key.json | img login -u _json_key --password-stdin https://gcr.io
           img push ${dockerReg}/${imageName}:${imageTag}
-          PREVIOUS_IMAGE_TAG=${imageTag}
+          export PREVIOUS_IMAGE_TAG=${imageTag}
         """
       }
     }
