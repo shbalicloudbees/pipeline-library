@@ -1,11 +1,11 @@
 // vars/containerBuildPushGeneric.groovy
 def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject = "core-workshop", Closure body) {
   def dockerReg = "gcr.io/${gcpProject}"
-  def label = "img-gcloud-${UUID.randomUUID().toString()}"
-  def podYaml = libraryResource 'podtemplates/containerBuildPush.yml'
+  def label = "kaniko-${repoOwner}"
+  def podYaml = libraryResource 'podtemplates/kaniko.yml'
   def customBuildArg = ""
   def buildModeArg = ""
-  podTemplate(name: 'img-gcloud', label: label, yaml: podYaml) {
+  podTemplate(name: 'kaniko', label: label, yaml: podYaml) {
     node(label) {
       body()
       try {
@@ -21,12 +21,12 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         buildModeArg = "--build-arg BUILD_MODE=build:dev" 
       }
       imageName = imageName.toLowerCase()
-      container('img-gcloud') {
-        sh """
-          img build ${buildModeArg} --build-arg buildNumber=${BUILD_NUMBER} ${customBuildArg} ${customBuildArg} --build-arg shortCommit=${env.SHORT_COMMIT} --build-arg commitAuthor="${env.COMMIT_AUTHOR}" -t ${dockerReg}/${imageName}:${imageTag} ${pwd()}
-          gcloud  auth configure-docker --quiet
-          img push ${dockerReg}/${imageName}:${imageTag}
-        """
+      container(name: 'kaniko', shell: '/busybox/sh') {
+        withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+          sh """#!/busybox/sh
+            /kaniko/executor -f ${pwd()}/Dockerfile -c ${pwd()} ${buildModeArg} ${customBuildArg} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --cache=true -d ${dockerReg}/${imageName}:${imageTag}
+          """
+        }
       }
     }
   }

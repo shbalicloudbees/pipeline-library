@@ -8,7 +8,7 @@ def call(String nameSpace = "cloudbees-core") {
     node(label) {
       checkout scm
       container("kubectl") {
-        sh "mkdir ${masterName}"
+        sh "mkdir -p ${masterName}"
         sh "cp *.yaml ${masterName}"
         sh "kubectl exec --namespace ${nameSpace} cjoc-0 -- rm -rf /var/jenkins_home/jcasc-bundles-store/${masterName}"
         sh "kubectl cp --namespace ${nameSpace} ${masterName} cjoc-0:/var/jenkins_home/jcasc-bundles-store/"
