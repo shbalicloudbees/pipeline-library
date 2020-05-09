@@ -23,7 +23,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
           sh "echo 'deployed to ${url}'"
         }
         container("jnlp") {
-          gitHubCommitStatus(repoName, repoOwner, env.SHORT_COMMIT, url, "your application was successfully deployed", "deployed-to-${hostPrefix}")
+          gitHubCommitStatus(repoName, repoOwner, env.COMMIT_SHA, url, "your application was successfully deployed", "deployed-to-${hostPrefix}")
         }
       }
     }
