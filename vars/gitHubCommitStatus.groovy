@@ -1,4 +1,4 @@
-def call(repoName, repoOwner, sha, targetUrl, description, context, state="success") {        
+def call(githubCredentialId, repoName, repoOwner, sha, targetUrl, description, context, state="success") {        
   withCredentials([usernamePassword(credentialsId: "${githubCredentialId}", usernameVariable: 'USERNAME', passwordVariable: 'TOKEN')]) {
     sh """
       curl -s -H "Authorization: token ${TOKEN}" \
