@@ -18,9 +18,11 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         sh("sed -i 's#REPLACE_HOSTNAME#${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml")
         sh("sed -i 's#REPLACE_REPO_OWNER#${repoOwner}-${hostPrefix}#' .kubernetes/frontend.yaml")
         container("kubectl") {
-          sh "cat .kubernetes/frontend.yaml"
-          sh "kubectl apply -f .kubernetes/frontend.yaml"
-          sh "echo 'deployed to ${url}'"
+            sh label: "${hostPrefix} deployment" script: """
+              cat .kubernetes/frontend.yaml
+              kubectl apply -f .kubernetes/frontend.yaml
+              echo 'deployed to ${url}'
+            """
         }
         container("jnlp") {
           gitHubCommitStatus(repoName, repoOwner, env.COMMIT_SHA, url, "your application was successfully deployed", "deployed-to-${hostPrefix}")
