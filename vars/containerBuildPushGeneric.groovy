@@ -23,7 +23,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
       imageName = imageName.toLowerCase()
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
-          sh """#!/busybox/sh
+          sh label: "container build and push" script: """#!/busybox/sh
             /kaniko/executor -f ${pwd()}/Dockerfile -c ${pwd()} ${buildModeArg} ${customBuildArg} --build-arg buildNumber=${BUILD_NUMBER} --build-arg shortCommit=${env.SHORT_COMMIT} --cache=true -d ${dockerReg}/${imageName}:${imageTag}
           """
         }
