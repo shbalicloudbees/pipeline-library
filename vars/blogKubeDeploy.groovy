@@ -18,7 +18,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         sh("sed -i 's#REPLACE_HOSTNAME#${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml")
         sh("sed -i 's#REPLACE_REPO_OWNER#${repoOwner}-${hostPrefix}#' .kubernetes/frontend.yaml")
         container("kubectl") {
-            sh label: "${hostPrefix} deployment" script: """
+            sh label: "${hostPrefix} deployment", script: """
               cat .kubernetes/frontend.yaml
               kubectl apply -f .kubernetes/frontend.yaml
               echo 'deployed to ${url}'
