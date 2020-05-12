@@ -14,15 +14,17 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
           hostPrefix = "production"
         }
         url = "http://${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}"
-        sh("sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml")
-        sh("sed -i 's#REPLACE_HOSTNAME#${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml")
-        sh("sed -i 's#REPLACE_REPO_OWNER#${repoOwner}-${hostPrefix}#' .kubernetes/frontend.yaml")
+        sh label: "update deployment scripts", script: """
+          sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml
+          sed -i 's#REPLACE_HOSTNAME#${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml
+          sed -i 's#REPLACE_REPO_OWNER#${repoOwner}-${hostPrefix}#' .kubernetes/frontend.yaml
+        """
         container("kubectl") {
-            sh label: "${hostPrefix} deployment", script: """
-              cat .kubernetes/frontend.yaml
-              kubectl apply -f .kubernetes/frontend.yaml
-              echo 'deployed to ${url}'
-            """
+          sh label: "${hostPrefix} deployment", script: """
+            cat .kubernetes/frontend.yaml
+            kubectl apply -f .kubernetes/frontend.yaml
+          """
+          sh label: "deployment url", script: "echo 'deployed to ${url}'"
         }
         container("jnlp") {
           gitHubCommitStatus(repoName, repoOwner, env.COMMIT_SHA, url, "your application was successfully deployed", "deployed-to-${hostPrefix}")
