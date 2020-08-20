@@ -1,9 +1,9 @@
 // vars/cloudRunDeploy.groovy
 def call(Map config) {
   def podYaml = libraryResource 'podtemplates/google-cloud-sdk.yml'
-  def label = "cloudrun-${UUID.randomUUID().toString()}"
+  def label = "cloud-sdk-${UUID.randomUUID().toString()}"
   def CLOUD_RUN_URL
-  podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml) {
+  podTemplate(name: 'cloud-sdk', label: label, yaml: podYaml) {
     node(label) {
       container(name: 'gcp-sdk') {
         if (config.deployType == "gke") {
