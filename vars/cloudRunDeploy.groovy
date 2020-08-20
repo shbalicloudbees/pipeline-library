@@ -1,6 +1,6 @@
 // vars/cloudRunDeploy.groovy
 def call(Map config) {
-  def podYaml = libraryResource 'podtemplates/cloud-run.yml'
+  def podYaml = libraryResource 'podtemplates/google-cloud-sdk.yml'
   def label = "cloudrun-${UUID.randomUUID().toString()}"
   def CLOUD_RUN_URL
   podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml) {
