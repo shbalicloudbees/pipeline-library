@@ -4,7 +4,7 @@ metadata:
 spec:
   containers:
   - name: hugo
-    image: jojomi/hugo:0.58
+    image: jojomi/hugo:0.74
     command:
     - cat
     tty: true
