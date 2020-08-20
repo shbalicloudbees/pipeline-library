@@ -8,6 +8,7 @@ def call(Map config, Closure body) {
       body()
       container(name: 'gcp-sdk') {
         sh "gsutil -m cp -r public/** gs://${config.bucket}"
+      }
     }
   }
 }
