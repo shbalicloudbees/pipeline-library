@@ -6,7 +6,7 @@ def call(Map config) {
   podTemplate(name: 'cloud-sdk', label: label, yaml: podYaml) {
     node(label) {
       container(name: 'gcp-sdk') {
-        sh "gsutil -m cp -r dir gs://${config.bucket}"
+        sh "gsutil -m cp -r public/** gs://${config.bucket}"
     }
   }
 }
