@@ -1,0 +1,18 @@
+kind: Pod
+metadata:
+  name: gsutil
+spec:
+  containers:
+  - name: gsutil
+    image: gcr.io/cloud-builders/gsutil:latest
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+      - name: gcp-logs
+        mountPath: /.config/gcloud/logs
+  volumes:
+  - name: gcp-logs
+    emptyDir: {}
+  securityContext:
+    runAsUser: 1000
