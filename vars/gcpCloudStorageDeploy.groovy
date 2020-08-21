@@ -1,5 +1,5 @@
 // vars/gcpCloudStorageDeploy.groovy
-def call(Map config, Closure body) {
+def call(String bucket, Closure body) {
   def podYaml = libraryResource 'podtemplates/gsutil.yml'
   def label = "gsutil-${UUID.randomUUID().toString()}"
   def CLOUD_RUN_URL
@@ -7,7 +7,7 @@ def call(Map config, Closure body) {
     node(label) {
       body()
       container(name: 'gsutil') {
-        sh "gsutil -m cp -a -r public/** gs://${config.bucket}"
+        sh "gsutil -m cp -a -r public/** gs://${bucket}"
       }
     }
   }
