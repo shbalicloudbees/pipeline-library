@@ -15,4 +15,4 @@ spec:
   - name: gcp-logs
     emptyDir: {}
   securityContext:
-    runAsUser: 0
+    runAsUser: 1000
