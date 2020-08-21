@@ -9,20 +9,10 @@ spec:
     - cat
     tty: true
     volumeMounts:
-      - name: gcp-logs
-        mountPath: /.config/gcloud/logs
-    volumeMounts:
-      - name: gcp-config
-        mountPath: /.config/gcloud/configurations
-    volumeMounts:
-      - name: gcp-active-config
-        mountPath: /.config/gcloud/active_config 
+      - name: gcloud
+        mountPath: /.config/gcloud 
   volumes:
-  - name: gcp-logs
-    emptyDir: {}
-  - name: gcp-config
-    emptyDir: {}
-  - name: gcp-active-config
+  - name: gcloud
     emptyDir: {}
   securityContext:
     runAsUser: 1000
