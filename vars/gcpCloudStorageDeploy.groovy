@@ -7,7 +7,7 @@ def call(String bucket, Closure body) {
     node(label) {
       body()
       container(name: 'gsutil') {
-        sh "gsutil -m cp -a -r public/** gs://${bucket}"
+        sh "gsutil -m cp -r public/** gs://${bucket}"
       }
     }
   }
