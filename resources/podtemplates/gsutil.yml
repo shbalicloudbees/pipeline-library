@@ -14,10 +14,15 @@ spec:
     volumeMounts:
       - name: gcp-config
         mountPath: /.config/gcloud/configurations
+    volumeMounts:
+      - name: gcp-active_config
+        mountPath: /.config/gcloud/active_config 
   volumes:
   - name: gcp-logs
     emptyDir: {}
   - name: gcp-config
+    emptyDir: {}
+  - name: gcp-active_config
     emptyDir: {}
   securityContext:
     runAsUser: 1000
