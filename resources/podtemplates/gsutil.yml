@@ -13,7 +13,7 @@ spec:
         mountPath: /.config/gcloud/logs
     volumeMounts:
       - name: gcp-config
-        mountPath: /.config/gcloud/configuration
+        mountPath: /.config/gcloud/configurations
   volumes:
   - name: gcp-logs
     emptyDir: {}
