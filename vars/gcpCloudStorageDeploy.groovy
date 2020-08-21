@@ -7,6 +7,7 @@ def call(Map config, Closure body) {
     node(label) {
       body()
       container(name: 'gcp-sdk') {
+        sh "gcloud auth list"
         sh "gsutil -m cp -a -r public/** gs://${config.bucket}"
       }
     }
