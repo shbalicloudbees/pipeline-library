@@ -12,7 +12,7 @@ def call(String bucket, String bucketFolder, Closure body) {
     node(label) {
       body()
       container(name: 'gsutil') {
-        sh "gsutil -m rsync -d -r gs://${bucket}${bucketFolder} public"
+        sh "gsutil -m rsync -d -r public gs://${bucket}${bucketFolder}"
       }
     }
   }
