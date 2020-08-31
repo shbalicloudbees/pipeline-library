@@ -1,4 +1,4 @@
-def call(String gitHubOrg, String gitHubRepo, String[] contexts = ["pmd","checkstyle"], String credentialId = 'cloudbees-ci-workshop-github-app') {        
+def call(String gitHubOrg, String gitHubRepo, String contexts = '["pmd","checkstyle"]', String credentialId = 'cloudbees-ci-workshop-github-app') {        
   withCredentials([usernamePassword(credentialsId: "${credentialId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
     sh """
       curl \
