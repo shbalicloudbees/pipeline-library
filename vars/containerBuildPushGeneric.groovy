@@ -15,7 +15,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
         imageTag = env.VERSION
       } catch(e) {}
       if(env.EVENT_PUSH_IMAGE_TAG) {
-        customBuildArg = "--build-arg NODE_IMAGE=${env.EVENT_PUSH_IMAGE_NAME}:${env.EVENT_PUSH_IMAGE_TAG}"
+        customBuildArg = "--build-arg BASE_IMAGE=${env.EVENT_PUSH_IMAGE_NAME}:${env.EVENT_PUSH_IMAGE_TAG}"
       }
       if(env.BRANCH_NAME != "master") {
         buildModeArg = "--build-arg BUILD_MODE=build:dev" 
