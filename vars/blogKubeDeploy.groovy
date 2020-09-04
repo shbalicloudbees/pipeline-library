@@ -13,7 +13,8 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         if(env.BRANCH_NAME == "master") {
           hostPrefix = "production"
         }
-        url = "http://${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}"
+        url = "http://${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}"=
+        gitHubDeployStatus(repoOwner, repoName, url)
         sh label: "update deployment scripts", script: """
           sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml
           sed -i 's#REPLACE_HOSTNAME#${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}#' .kubernetes/frontend.yaml
@@ -27,6 +28,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
           sh label: "deployment url", script: "echo 'deployed to ${url}'"
         }
         container("jnlp") {
+          gitHubDeployStatus(repoOwner, repoName, url, 'success')
           gitHubCommitStatus(repoName, repoOwner, env.COMMIT_SHA, url, "your application was successfully deployed", "deployed-to-${hostPrefix}")
         }
       }
