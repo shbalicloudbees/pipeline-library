@@ -13,7 +13,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         if(env.BRANCH_NAME == "master") {
           hostPrefix = "production"
         }
-        url = "http://${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}"=
+        url = "http://${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}"
         gitHubDeployStatus(repoOwner, repoName, url)
         sh label: "update deployment scripts", script: """
           sed -i 's#REPLACE_IMAGE#${dockerRegistryDomain}/${repoOwner}/${repoName}:${env.VERSION}#' .kubernetes/frontend.yaml
