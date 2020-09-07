@@ -5,7 +5,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
     def deployYaml = libraryResource 'k8s/basicDeploy.yml'
     def hostPrefix = "development"
     
-    podTemplate(name: 'kubectl', label: label, yaml: podYaml) {
+    podTemplate(name: 'kubectl', label: label, yaml: podYaml, podRetention: always(), idleMinutes: 30) {
       node(label) {
         body()
         repoName = repoName.toLowerCase()
