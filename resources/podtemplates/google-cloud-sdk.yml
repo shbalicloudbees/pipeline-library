@@ -4,7 +4,7 @@ metadata:
 spec:
   containers:
   - name: gcp-sdk
-    image: gcr.io/google.com/cloudsdktool/cloud-sdk:306.0.0-alpine
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:308.0.0
     command:
     - cat
     tty: true
