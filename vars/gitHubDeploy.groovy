@@ -9,7 +9,7 @@ def call(String gitHubOrg, String gitHubRepo, String deployUrl = "", String envi
         -H 'Accept: application/vnd.github.flash-preview+json' \
         -H 'Accept: application/vnd.github.ant-man-preview+json' \
         https://api.github.com/repos/${gitHubOrg}/${gitHubRepo}/deployments \
-        --data '{"ref":"${env.COMMIT_SHA}","environment":"${environment}","required_contexts":[],"description":"CloudBees CI Deployment","transient_environment":${transientEnv},"production_environment":${productionEnv}}')
+        --data '{"ref":"${env.BRANCH}","environment":"${environment}","required_contexts":[],"description":"CloudBees CI Deployment","transient_environment":${transientEnv},"production_environment":${productionEnv}}')
         
       \$json | jq -r '.id' | tr -d '\n' 
     """, returnStdout: true)
