@@ -1,4 +1,4 @@
-def call(String gitHubOrg, String gitHubRepo, String deployUrl = "", String environment = 'staging', String credentialId = env.credId, boolean transient = false) {        
+def call(String gitHubOrg, String gitHubRepo, String deployUrl = "", String environment = 'staging', String credentialId = env.credId, boolean transient = false, boolean production = false) {        
   withCredentials([usernamePassword(credentialsId: "${credentialId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
    def deploymentId =  sh(script: """
       curl \
@@ -9,7 +9,7 @@ def call(String gitHubOrg, String gitHubRepo, String deployUrl = "", String envi
         -H 'Accept: application/vnd.github.flash-preview+json' \
         -H 'Accept: application/vnd.github.ant-man-preview+json' \
         https://api.github.com/repos/${gitHubOrg}/${gitHubRepo}/deployments \
-        --data '{"ref":"${env.COMMIT_SHA}","environment":"${environment}","required_contexts":[],"description":"CloudBees CI Deployment","transient_environment":${transient}}' \
+        --data '{"ref":"${env.COMMIT_SHA}","environment":"${environment}","required_contexts":[],"description":"CloudBees CI Deployment","transient_environment":${transient},"production_environment":${production}}' \
         | jq -r '.id' | tr -d '\n' 
     """, returnStdout: true)
     env.GITHUB_DEPLOYMENT_ID = deploymentId
