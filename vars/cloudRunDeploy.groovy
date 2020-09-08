@@ -21,11 +21,12 @@ def call(Map config) {
       }
       //print detail description of deployed servce
       sh "cat run.json"
-      
+
+      CLOUD_RUN_URL = sh (script: "cat run.json | jq -r '.status.url' | tr -d '\n'", 
+                returnStdout: true)
+      gitHubDeployStatus(repoOwner, repo, CLOUD_RUN_URL, 'success')
       //only add comment for PRs - CHANGE_ID isn't populated for commits to regular branches
       if (env.CHANGE_ID) {
-        CLOUD_RUN_URL = sh (script: "cat run.json | jq -r '.status.url' | tr -d '\n'", 
-                  returnStdout: true)
         config.message = "Preview Environment URL: ${CLOUD_RUN_URL}"
         config.credId = githubCredentialId
         config.issueId = env.CHANGE_ID
