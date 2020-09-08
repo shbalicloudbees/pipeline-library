@@ -1,8 +1,8 @@
 // vars/cloudRunDelete.groovy
 def call(Map config) {
-  def podYaml = libraryResource 'podtemplates/cloud-run.yml'
+  def podYaml = libraryResource 'podtemplates/google-cloud-sdk.yml'
   def label = "cloudrun-${UUID.randomUUID().toString()}"
-  podTemplate(name: 'cloud-run-pod', label: label, yaml: podYaml, nodeSelector: 'workload=general') {
+  podTemplate(name: 'cloud-sdk', label: label, yaml: podYaml) {
     node(label) {
       container(name: 'gcp-sdk') {
         echo "region = ${config.region}"
