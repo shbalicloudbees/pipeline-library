@@ -11,12 +11,8 @@ spec:
     volumeMounts:
       - name: gcp-logs
         mountPath: /.config/gcloud/logs
-      - name: gcp-sdk
-        mountPath: /google-cloud-sdk
   volumes:
   - name: gcp-logs
-    emptyDir: {}
-  - name: gcp-sdk
     emptyDir: {}
   securityContext:
     runAsUser: 1000
