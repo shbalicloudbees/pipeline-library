@@ -6,6 +6,7 @@ def call(String gitHubOrg, String gitHubRepo, String deployUrl = "", String envi
         -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
         -H 'Accept: application/vnd.github.antiope-preview+json' \
         -H 'Accept: application/vnd.github.v3+json' \
+        -H 'Accept: application/vnd.github.flash-preview+json' \
         https://api.github.com/repos/${gitHubOrg}/${gitHubRepo}/deployments \
         --data '{"ref":"${env.COMMIT_SHA}","environment":"${environment}","required_contexts":[],"description":"CloudBees CI Deployment"}' \
         | jq -r '.id' | tr -d '\n' 
