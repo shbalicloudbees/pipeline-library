@@ -1,6 +1,6 @@
 def call(String gitHubOrg, String gitHubRepo, String deployUrl = "", String environment = 'staging', String credentialId = env.credId, String transientEnv = 'false', String productionEnv = 'false') {        
   withCredentials([usernamePassword(credentialsId: "${credentialId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
-   ref = env.CHANGE_BRANCH ?: env.BRANCH_NAME 
+   def ref = env.CHANGE_BRANCH ?: env.BRANCH_NAME 
    def deploymentId =  sh(script: """
       json = \$(curl \
         -X POST \
