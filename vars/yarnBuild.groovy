@@ -9,13 +9,11 @@ def call(String buildMode = "build", Closure body) {
       }
       container('nodejs') {
         sh """
-          mkdir -p app
-          cd ./app
           yarn install
           yarn run $buildMode
         """
+        stash name: "app", includes: "dist/**,.env*,nginx.conf,Dockerfile,version.txt" 
       }
-      stash name: "app", includes: "app/**" 
     }
   }
 }
