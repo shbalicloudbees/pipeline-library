@@ -1,4 +1,4 @@
-def call(String gitHubOrg, String gitHubRepo, String deployUrl, String status = 'in_progress', String environment = 'staging', String credentialId = env.credId, boolean transient = false) {        
+def call(String gitHubOrg, String gitHubRepo, String deployUrl, String status = 'in_progress', String credentialId = env.credId) {        
   withCredentials([usernamePassword(credentialsId: "${credentialId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
     sh(script: """
       curl \
@@ -9,7 +9,7 @@ def call(String gitHubOrg, String gitHubRepo, String deployUrl, String status = 
         -H "Accept: application/vnd.github.ant-man-preview+json"  \
         -H "Accept: application/vnd.github.flash-preview+json" \
         https://api.github.com/repos/${gitHubOrg}/${gitHubRepo}/deployments/${GITHUB_DEPLOYMENT_ID}/statuses \
-        --data '{"state":"${status}","environment_url":"${deployUrl}","log_url":"${BUILD_URL}","transient_environment":${transient}}'
+        --data '{"state":"${status}","environment_url":"${deployUrl}","log_url":"${BUILD_URL}"}'
     """)
    
   }
