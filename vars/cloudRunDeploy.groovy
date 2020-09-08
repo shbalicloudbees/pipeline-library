@@ -27,7 +27,7 @@ def call(Map config) {
         CLOUD_RUN_URL = sh (script: "cat run.json | jq -r '.status.url' | tr -d '\n'", 
                   returnStdout: true)
         config.message = "Preview Environment URL: ${CLOUD_RUN_URL}"
-        config.credId = credId
+        config.credId = githubCredentialId
         config.issueId = env.CHANGE_ID
         config.repoOwner = repoOwner
         config.repo = repo
