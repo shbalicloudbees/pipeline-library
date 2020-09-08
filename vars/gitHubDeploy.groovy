@@ -13,8 +13,8 @@ def call(String gitHubOrg, String gitHubRepo, String deployUrl = "", String envi
         --data '{"ref":"${ref}","environment":"${environment}","required_contexts":[],"description":"CloudBees CI Deployment","transient_environment":${transientEnv},"production_environment":${productionEnv}}' \
       | jq -r '.id' | tr -d '\n' 
     """, returnStdout: true)
-    echo "GitHub deployment id: ${deploymentId}"
     env.GITHUB_DEPLOYMENT_ID = deploymentId
+    echo "GitHub deployment id: ${env.GITHUB_DEPLOYMENT_ID}"
     gitHubDeployStatus(gitHubOrg, gitHubRepo, deployUrl)
    
   }
