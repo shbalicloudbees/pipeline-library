@@ -1,8 +1,7 @@
 // vars/gcpCloudStorageDeploy.groovy
-def call(String bucket, String bucketFolder, Closure body) {
+def call(String bucket, String bucketFolder, String deployUrl = "", Closure body) {
   def podYaml = libraryResource 'podtemplates/gsutil.yml'
   def label = "gsutil-${UUID.randomUUID().toString()}"
-  def CLOUD_RUN_URL
   if(bucketFolder) {
     bucketFolder = "/${bucketFolder}"
   } else {
@@ -14,6 +13,7 @@ def call(String bucket, String bucketFolder, Closure body) {
       container(name: 'gsutil') {
         sh "gsutil -m rsync -r public gs://${bucket}${bucketFolder}"
       }
+      gitHubDeployStatus(repoOwner, repo, deployUrl, 'success')
     }
   }
 }
