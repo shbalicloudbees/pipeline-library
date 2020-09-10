@@ -1,4 +1,4 @@
-@Library("pipeline-library@$BRANCH_NAME") _
+library "pipeline-library@$BRANCH_NAME"
 def gitHubCredId = 'field-workshops-github-app'
 pipeline {
   agent none
