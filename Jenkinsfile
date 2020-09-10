@@ -59,13 +59,7 @@ pipeline {
               """)
             }
             script {
-              Map config
-              config.message = "test pr comment"
-              config.credId = gitHubCredId
-              config.issueId = 1
-              config.repoOwner = 'cloudbees-days'
-              config.repo = 'pipeline-library-test'
-              gitHubComment(config)
+              gitHubComment(message = "test pr comment", credId = gitHubCredId, issueId = 1, repoOwner = 'cloudbees-days', repo = 'pipeline-library-test')
               
               withCredentials([usernamePassword(credentialsId: "${gitHubCredId}",
                   usernameVariable: 'GITHUB_APP',
