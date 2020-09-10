@@ -58,9 +58,8 @@ pipeline {
                      https://api.github.com/repos/cloudbees-days/pipeline-library-test/pulls
               """)
             }
+            gitHubComment(message: "test pr comment", credId: gitHubCredId, issueId: 1, repoOwner: 'cloudbees-days', repo: 'pipeline-library-test')
             script {
-              gitHubComment(message = "test pr comment", credId = gitHubCredId, issueId = 1, repoOwner = 'cloudbees-days', repo = 'pipeline-library-test')
-              
               withCredentials([usernamePassword(credentialsId: "${gitHubCredId}",
                   usernameVariable: 'GITHUB_APP',
                   passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
