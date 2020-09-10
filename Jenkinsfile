@@ -35,7 +35,7 @@ pipeline {
                 git commit -a -m 'adding marker file'
                 git push -u origin test-branch
                 
-                echo "create pull requests"
+                echo "create pull request"
                 curl -H 'Accept: application/vnd.github.antiope-preview+json' \
                      -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
                      --data '{"title":"add marker file","head":"test-branch","base":"master"}' \
@@ -50,21 +50,22 @@ pipeline {
               config.repoOwner = 'cloudbees-days'
               config.repo = 'pipeline-library-test'
               gitHubComment(config)
-            }
-            withCredentials([usernamePassword(credentialsId: "${gitHubCredId}",
-                usernameVariable: 'GITHUB_APP',
-                passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
-              def actualCommentBody =  sh(script: """
-                curl \
-                  -H "Accept: application/vnd.github.v3+json" \
-                  -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
-                  https://api.github.com/repos/cloudbees-days/pipeline-library-test/issues/comments/1
-                  | jq -r '.body' | tr -d '\n' 
-              """, returnStdout: true)
-              if(actualCommentBody != "test pr comment") {
-                error "Failed PR Comment Test"
+              
+              withCredentials([usernamePassword(credentialsId: "${gitHubCredId}",
+                  usernameVariable: 'GITHUB_APP',
+                  passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+                def actualCommentBody =  sh(script: """
+                  curl \
+                    -H "Accept: application/vnd.github.v3+json" \
+                    -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
+                    https://api.github.com/repos/cloudbees-days/pipeline-library-test/issues/comments/1
+                    | jq -r '.body' | tr -d '\n' 
+                """, returnStdout: true)
+                if(actualCommentBody != "test pr comment") {
+                  error "Failed PR Comment Test"
+                }
               }
-            }      
+            }
           }
         }
       }
