@@ -70,21 +70,21 @@ pipeline {
           }
         }
       }
-      post {
-        always {
-          node('default-jnlp') {
-            withCredentials([usernamePassword(credentialsId: "field-workshops-github-app",
-                usernameVariable: 'GITHUB_APP',
-                passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
-              sh(script: """
-                curl \
-                  -X DELETE \
-                  -H "Accept: application/vnd.github.v3+json" \
-                  -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
-                  https://api.github.com/repos/cloudbees-days/pipeline-library-test
-              """)
-            }
-          }
+    }
+  }
+  post {
+    always {
+      node('default-jnlp') {
+        withCredentials([usernamePassword(credentialsId: "${gitHubCredId}",
+            usernameVariable: 'GITHUB_APP',
+            passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+          sh(script: """
+            curl \
+              -X DELETE \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
+              https://api.github.com/repos/cloudbees-days/pipeline-library-test
+          """)
         }
       }
     }
