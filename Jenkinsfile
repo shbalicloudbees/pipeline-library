@@ -21,7 +21,22 @@ pipeline {
                      -H "Accept: application/vnd.github.baptiste-preview+json" \
                      https://api.github.com/repos/cloudbees-days/simple-java-maven-app/generate \
                      --data '{"owner":"cloudbees-days","name":"pipeline-library-test"}'
-                
+               """)
+              
+              waitUntil {
+                script {
+                  def status = sh (script: """
+                    curl -s -o /dev/null -w '%{http_code}' \
+                      -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
+                      -H 'Accept: application/vnd.github.baptiste-preview+json' \
+                      https://api.github.com/repos/cloudbees-days/pipeline-library-test/git/ref/heads/master
+                    """, returnStdout: true)
+                  echo "after creating pipeline-library-test repo - returned status: ${status}"
+                  return (status=="200")
+                }
+              }
+              
+              sh(script: """
                 mkdir -p pipeline-library-test
                 cd pipeline-library-test
                 git init
