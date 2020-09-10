@@ -3,7 +3,8 @@ def gitHubCredId = 'field-workshops-github-app'
 pipeline {
   agent none
   options {
-   timeout(time: 10, unit: 'MINUTES') 
+    timeout(time: 20, unit: 'MINUTES') 
+    disableConcurrentBuilds()
   }
   stages {
     stage('GitHub Tests') {
