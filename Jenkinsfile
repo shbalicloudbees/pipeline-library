@@ -27,7 +27,7 @@ pipeline {
                 git init
                 git config user.email "cbci.bot@workshop.cb-sa.io"
                 git config user.name "CloudBees CI Bot"
-                git remote add origin https://x-access-token:${GITHUB_ACCESS_TOKEN}@github.com/${GitHubOrganization}/cloudbees-ci-config-bundle.git
+                git remote add origin https://x-access-token:${GITHUB_ACCESS_TOKEN}@github.com/cloudbees-days/pipeline-library-test.git
                 git pull origin master
                 git fetch
                 git checkout -B test-branch
