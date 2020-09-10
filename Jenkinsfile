@@ -85,6 +85,16 @@ pipeline {
           }
         }
       }
+      stage('Repo Files') {
+        steps {
+          customYamlProps()
+          script {
+            if(${lineCoverage} != 100) {
+              error "Failed customYamlProps test" 
+            }
+          }
+        }
+      }
     }
   }
   post {
