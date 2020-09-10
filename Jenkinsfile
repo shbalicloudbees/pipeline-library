@@ -64,12 +64,12 @@ pipeline {
                   usernameVariable: 'GITHUB_APP',
                   passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
                 def actualCommentBody =  sh(script: """
-                  curl \
-                    -H "Accept: application/vnd.github.v3+json" \
-                    -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
-                    https://api.github.com/repos/cloudbees-days/pipeline-library-test/issues/comments/1
-                    | jq -r '.body' | tr -d '\n' 
-                """, returnStdout: true)
+                    curl \
+                      -H "Accept: application/vnd.github.v3+json" \
+                      -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
+                      https://api.github.com/repos/cloudbees-days/pipeline-library-test/issues/comments/1 \
+                      | jq -r '.body' | tr -d '\n' 
+                  """, returnStdout: true)
                 if(actualCommentBody != "test pr comment") {
                   error "Failed PR Comment Test"
                 }
