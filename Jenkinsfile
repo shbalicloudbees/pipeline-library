@@ -84,7 +84,7 @@ pipeline {
               customYamlProps()
             }
             script {
-              if(lineCoverage != 100) {
+              if(!lineCoverage.equals("100")) {
                 error "Failed customYamlProps test" 
               }
             }
