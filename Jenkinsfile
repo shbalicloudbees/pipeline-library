@@ -70,7 +70,8 @@ pipeline {
                       https://api.github.com/repos/cloudbees-days/pipeline-library-test/issues/comments/1 \
                       | jq -r '.body' | tr -d '\n' 
                   """, returnStdout: true)
-                if(actualCommentBody != "test pr comment") {
+                echo "actualCommentBody: ${actualCommentBody}"
+                if(!actualCommentBody.equals("test pr comment")) {
                   error "Failed PR Comment Test"
                 }
               }
