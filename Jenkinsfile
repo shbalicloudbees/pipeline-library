@@ -20,7 +20,7 @@ pipeline {
                      -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
                      -H "Accept: application/vnd.github.baptiste-preview+json" \
                      https://api.github.com/repos/cloudbees-days/simple-java-maven-app/generate \
-                     --data '{"owner":"cloudbees-days","name":"pipeline-library-test"}'
+                     --data '{"owner":"cloudbees-days","name":"${BUILD_TAG}"}'
                """)
               
               waitUntil {
@@ -29,9 +29,9 @@ pipeline {
                     curl -s -o /dev/null -w '%{http_code}' \
                       -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
                       -H 'Accept: application/vnd.github.baptiste-preview+json' \
-                      https://api.github.com/repos/cloudbees-days/pipeline-library-test/git/ref/heads/master
+                      https://api.github.com/repos/cloudbees-days/${BUILD_TAG}/git/ref/heads/master
                     """, returnStdout: true)
-                  echo "after creating pipeline-library-test repo - returned status: ${status}"
+                  echo "after creating ${BUILD_TAG} repo - returned status: ${status}"
                   return (status=="200")
                 }
               }
@@ -42,7 +42,7 @@ pipeline {
                 git init
                 git config user.email "cbci.bot@workshop.cb-sa.io"
                 git config user.name "CloudBees CI Bot"
-                git remote add origin https://x-access-token:${GITHUB_ACCESS_TOKEN}@github.com/cloudbees-days/pipeline-library-test.git
+                git remote add origin https://x-access-token:${GITHUB_ACCESS_TOKEN}@github.com/cloudbees-days/${BUILD_TAG}.git
                 git pull origin master
                 git fetch
                 git checkout -B test-branch
@@ -55,11 +55,11 @@ pipeline {
                 curl -H 'Accept: application/vnd.github.antiope-preview+json' \
                      -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
                      --data '{"title":"add marker file","head":"test-branch","base":"master"}' \
-                     https://api.github.com/repos/cloudbees-days/pipeline-library-test/pulls
+                     https://api.github.com/repos/cloudbees-days/${BUILD_TAG}/pulls
               """)
             }
             script {
-              def commentId = gitHubComment(message: "test pr comment", credId: gitHubCredId, issueId: 1, repoOwner: 'cloudbees-days', repo: 'pipeline-library-test')
+              def commentId = gitHubComment(message: "test pr comment", credId: gitHubCredId, issueId: 1, repoOwner: 'cloudbees-days', repo: BUILD_TAG)
               withCredentials([usernamePassword(credentialsId: "${gitHubCredId}",
                   usernameVariable: 'GITHUB_APP',
                   passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
@@ -67,7 +67,7 @@ pipeline {
                     curl \
                       -H "Accept: application/vnd.github.v3+json" \
                       -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
-                      https://api.github.com/repos/cloudbees-days/pipeline-library-test/issues/comments/${commentId} \
+                      https://api.github.com/repos/cloudbees-days/${BUILD_TAG}/issues/comments/${commentId} \
                     | jq -r '.body' | tr -d '\n' 
                   """, returnStdout: true)
                 echo "actualCommentBody: ${actualCommentBody}"
@@ -102,7 +102,7 @@ pipeline {
               -X DELETE \
               -H "Accept: application/vnd.github.v3+json" \
               -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
-              https://api.github.com/repos/cloudbees-days/pipeline-library-test
+              https://api.github.com/repos/cloudbees-days/${BUILD_TAG}
           """)
         }
       }
