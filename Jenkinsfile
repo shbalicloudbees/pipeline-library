@@ -80,7 +80,9 @@ pipeline {
         }
         stage('Repo Files') {
           steps {
-            customYamlProps()
+            dir('pipeline-library-test') {
+              customYamlProps()
+            }
             script {
               if(${lineCoverage} != 100) {
                 error "Failed customYamlProps test" 
