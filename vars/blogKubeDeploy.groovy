@@ -10,7 +10,7 @@ def call(repoName, repoOwner, dockerRegistryDomain, deploymentDomain, gcpProject
         body()
         repoName = repoName.toLowerCase()
         repoOwner = repoOwner.toLowerCase()
-        if(env.BRANCH_NAME == "master") {
+        if(env.BRANCH_NAME == "main") {
           hostPrefix = "production"
         }
         url = "http://${hostPrefix}.${repoOwner}-${repoName}.${deploymentDomain}"
