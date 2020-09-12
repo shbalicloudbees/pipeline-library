@@ -1,5 +1,5 @@
 def call(String gitHubOrg, String credentialId = 'cloudbees-ci-workshop-github-app') {
-  if(env.BUILD_NUMBER.equals("4")) {
+  if(env.BUILD_NUMBER.equals("1")) {
     withCredentials([usernamePassword(credentialsId: "${credentialId}", usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
       sh """
         curl -H 'Accept: application/vnd.github.antiope-preview+json' \
