@@ -6,7 +6,7 @@ def call(String gitHubOrg, String credentialId = 'cloudbees-ci-workshop-github-a
            -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
            -X PATCH \
            https://api.github.com/repos/${gitHubOrg}/cloudbees-ci-config-bundle/pulls/4 \
-           --data '{"state":"closed"}
+           --data '{"state":"closed"}'
       """
     }
   }
