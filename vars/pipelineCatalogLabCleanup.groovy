@@ -4,9 +4,8 @@ def call(String gitHubOrg, String credentialId = 'cloudbees-ci-workshop-github-a
       sh """
         curl -H 'Accept: application/vnd.github.antiope-preview+json' \
            -H 'authorization: Bearer ${GITHUB_ACCESS_TOKEN}' \
-           -X PATCH \
-           https://api.github.com/repos/${gitHubOrg}/cloudbees-ci-config-bundle/pulls/4 \
-           --data '{"state":"closed"}'
+           -X DELETE \
+           https://api.github.com/repos/${gitHubOrg}/cloudbees-ci-config-bundle/git/refs/heads/cbci-module-2-setup
       """
     }
   }
