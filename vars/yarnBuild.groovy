@@ -13,6 +13,7 @@ def call(String buildMode = "build", Closure body) {
           yarn run $buildMode
         """
         stash name: "app", includes: "dist/**,.env*,nginx.conf,Dockerfile,version.txt" 
+        stash name: "output", includes: "output/**" 
       }
     }
   }
