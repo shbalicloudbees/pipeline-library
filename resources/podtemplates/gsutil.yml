@@ -2,6 +2,7 @@ kind: Pod
 metadata:
   name: gsutil
 spec:
+  serviceAccountName: jenkins
   containers:
   - name: gsutil
     image: gcr.io/cloud-builders/gsutil:latest
