@@ -5,7 +5,7 @@ def call(String imageName, String imageTag = env.BUILD_NUMBER, String gcpProject
   def podYaml = libraryResource 'podtemplates/kaniko.yml'
   def customBuildArg = ""
   def buildModeArg = ""
-  podTemplate(name: 'kaniko', label: label, yaml: podYaml, podRetention: always(), idleMinutes: 30) {
+  podTemplate(name: 'kaniko', inheritFrom: 'default-jnlp', label: label, yaml: podYaml, podRetention: always(), idleMinutes: 30) {
     node(label) {
       body()
       try {
