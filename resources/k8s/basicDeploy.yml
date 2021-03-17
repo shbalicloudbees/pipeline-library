@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: REPLACE_SERVICE_NAME
+  name: REPLACE_SERVICE_NAME-staging
   labels:
     net.beedemo.deploy.type: workshop
 spec:
@@ -11,27 +11,30 @@ spec:
     protocol: TCP
     name: http
   selector:
-    app: REPLACE_SERVICE_NAME
+    app: REPLACE_SERVICE_NAME-staging
 ---
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: REPLACE_SERVICE_NAME-staging
   labels:
     net.beedemo.deploy.type: workshop
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: REPLACE_SERVICE_NAME-staging
   template:
     metadata:
-      name: REPLACE_SERVICE_NAME
+      name: REPLACE_SERVICE_NAME-staging
       labels:
         net.beedemo.deploy.type: workshop
-        app: REPLACE_SERVICE_NAME
+        app: REPLACE_SERVICE_NAME-staging
         env: staging
     spec:
       serviceAccountName: cjoc
       containers:
-      - name: REPLACE_SERVICE_NAME
+      - name: REPLACE_SERVICE_NAME-staging
         image: REPLACE_IMAGE_TAG
         resources:
           requests:
@@ -47,7 +50,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: REPLACE_SERVICE_NAME
+  name: REPLACE_SERVICE_NAME-staging
   labels:
     net.beedemo.deploy.type: workshop
   annotations:
@@ -59,6 +62,6 @@ spec:
       paths:
       - path: /REPLACE_SERVICE_NAME/?(.*)
         backend:
-          serviceName: REPLACE_SERVICE_NAME
+          serviceName: REPLACE_SERVICE_NAME-staging
           servicePort: 80
-    host: staging.cb-sa.io
+    host: staging.cbci.workshop.cb-sa.io
