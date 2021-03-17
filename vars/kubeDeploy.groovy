@@ -1,5 +1,5 @@
 // vars/kubeDeploy.groovy
-def call(String imageName, String imageTag, String githubCredentialId, String gcpProject = "core-workshop", String repoOwner, String stagingBaseUrl = "http://staging.cbci.workshop.cb-sa.io") {
+def call(String imageName, String imageTag, String githubCredentialId, String gcpProject = "core-workshop", String repoOwner, String stagingBaseUrl = "staging.cbci.workshop.cb-sa.io") {
   def label = "kubectl"
   def podYaml = libraryResource 'podtemplates/kubectl.yml'
   def deployYaml = libraryResource 'k8s/basicDeploy.yml'
@@ -19,7 +19,7 @@ def call(String imageName, String imageTag, String githubCredentialId, String gc
       
       container("kubectl") {
         sh "kubectl apply -f deploy.yml"
-        sh "echo 'deployed to ${stagingBaseUrl}/${repoName}/'"
+        sh "echo 'deployed to http://${stagingBaseUrl}/${repoName}/'"
       }
     }
   }
