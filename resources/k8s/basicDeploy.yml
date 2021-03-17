@@ -64,4 +64,4 @@ spec:
         backend:
           serviceName: REPLACE_SERVICE_NAME-staging
           servicePort: 80
-    host: staging.cbci.workshop.cb-sa.io
+    host: REPLACE_HOST
