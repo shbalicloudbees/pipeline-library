@@ -13,7 +13,6 @@ def call(String imageName, String imageTag, String githubCredentialId, String gc
       sh """
         sed -i.bak 's#REPLACE_IMAGE_TAG#gcr.io/${gcpProject}/helloworld-nodejs:${repoName}-${BUILD_NUMBER}#' deploy.yml
         sed -i.bak 's#REPLACE_SERVICE_NAME#${repoName}#' deploy.yml
-        sed -i.bak 's#REPLACE_ENVIRONMENT_PREFIX#${ENVIRONMENT_PREFIX}#' deploy.yml
         sed -i.bak 's#REPLACE_HOST#${stagingBaseUrl}#' deploy.yml
       """
       
