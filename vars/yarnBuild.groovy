@@ -4,8 +4,11 @@ def call(String buildMode = "build", Closure body) {
   podTemplate(name: 'nodejs', label: label, yaml: podYaml, podRetention: always(), idleMinutes: 30) {
     node(label) {
       body()
-      if(env.BRANCH_NAME != "master") {
-        buildMode = "build:dev" 
+      if(BRANCH_NAME != "development") {
+        buildMode = "build" 
+      }
+      else {
+        buildMode = "build:dev"
       }
       container('nodejs') {
         sh """
