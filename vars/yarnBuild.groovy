@@ -4,7 +4,7 @@ def call(String buildMode = "build", Closure body) {
   podTemplate(name: 'nodejs', label: label, yaml: podYaml, podRetention: always(), idleMinutes: 30) {
     node(label) {
       body()
-      if(BRANCH_NAME != "master") {
+      if(BRANCH_NAME != "main") {
         buildMode = "build:dev" 
       }
       else {
