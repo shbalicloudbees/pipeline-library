@@ -1,5 +1,5 @@
 // vars/configBundleUpdate.groovy
-def call(String nameSpace = "sda") {
+def call(String nameSpace = "cbci") {
   def masterName = System.properties.'MASTER_NAME'
   def label = "kubectl"
   def podYaml = libraryResource 'podtemplates/kubectl.yml'
