@@ -1,4 +1,3 @@
-// vars/cloudRunDeploy.groovy
 def call(Map config) {
         agent {
                 kubernetes {
